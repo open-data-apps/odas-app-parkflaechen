@@ -1,0 +1,198 @@
+{
+  "app-entwickler-id": "12343",
+  "app-entwickler-name": "mueller-gmbh",
+  "name-in-url": "parkflaechen",
+  "name": "Parkflächen",
+  "version": "1.0.0",
+  "odas-app-icon": "assets/odas-app-icon.svg",
+  "app-icon": "assets/app-icon.png",
+  "kurzbeschreibung": [
+    "Wo gibt’s freie Parkplätze? Diese App zeigt verfügbare Parkflächen – inklusive Auslastung und maximaler Kapazität.",
+    "Ideal für Städte, die den ruhenden Verkehr besser managen wollen."
+  ],
+  "beschreibung": [
+    "_multiline_",
+    "Die Parkflächen Karte zeigt Parkflächen an. ",
+    "Die Daten werden aus einem Open Data Portal bezogen und müssen ",
+    "in Form von CSV-Dateien vorliegen.",
+    "Die Daten müssen in einem Open Data Portal",
+    "wie folgt aufgebaut sein: ",
+    "* Datensatz: mit allen Parkflächen als Ressourcen",
+    "* Ressourcen: Jeder Ort ist als CSV-Datei anzulegen.",
+    "* Beim Hochladen der Daten in den Datastore muss jede",
+    "* Beschreibung, die Kommas enthält muss in \"\" gesetzt werden",
+    "* Als URL muss ein Link zum Datensatz angegeben werden. Beispiel:",
+    "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen"
+  ],
+  "tags-funktion": ["Stadtinformation", "Verkehr"],
+  "tags-dateityp": ["csv"],
+  "tags-datenart": ["Geodaten", "Live-Daten"],
+  "screenshots": [
+    "docs/Desktop_Screenshot.png",
+    "docs/Mobile_Screenshot_1.png",
+    "docs/Mobile_Screenshot_2.png"
+  ],
+  "apiversion": "1",
+  "instanz-config": {
+    "seitentitel": {
+      "label": "Seitentitel",
+      "hilfe": "Der Seitentitel wird im Browser-Tab der App angezeigt",
+      "default": "Parkflächen",
+      "format": {
+        "typ": "string",
+        "laenge": 50
+      },
+      "erforderlich": "ja"
+    },
+    "lizenz": {
+      "label": "Lizenz",
+      "hilfe": "Angabe der Lizenz, die für die Nutzung der App gilt.",
+      "default": "Open Software License (OSL)",
+      "format": {
+        "typ": "string",
+        "laenge": 50
+      },
+      "erforderlich": "ja"
+    },
+    "titel": {
+      "label": "Titel",
+      "hilfe": "Der Titel wird in der Titelzeile der App angezeigt",
+      "default": "Parkflächen",
+      "format": {
+        "typ": "string",
+        "laenge": 50
+      },
+      "erforderlich": "ja"
+    },
+    "icon": {
+      "label": "App-Icon",
+      "hilfe": "Das Icon wird links oben in der Titelzeile angezeigt",
+      "default": "{{{odp.logo}}}",
+      "format": {
+        "typ": "image",
+        "hoehe": 64,
+        "breite": 189
+      },
+      "erforderlich": "ja"
+    },
+    "kontakt": {
+      "label": "Kontakt",
+      "hilfe": "Der Text wird im Menüpunkt 'Kontakt' anzeigt",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": [
+        "_multiline_",
+        "Sie sind zufrieden mit der App oder haben Anregungen, Verbesserungen oder Hinweise, die Sie uns mitteilen möchten?",
+        "Dann richten Sie sich gerne an uns. Wir freuen uns über alle Nachrichten. ",
+        "Ihre Nachrichten können Sie uns mitteilen über:",
+        "Tel.: <a href='tel:{{odp.anbieter.telcode}}'>{{odp.anbieter.tel}}</a>",
+        "E-Mail: <a href='mailto:{{odp.anbieter.email}}'>{{odp.anbieter.email}}</a>"
+      ],
+      "erforderlich": "ja"
+    },
+    "beschreibung": {
+      "label": "Beschreibung",
+      "hilfe": "Der Text wird im Menüpunkt 'Über diese App' anzeigt",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": [
+        "_multiline_",
+        "Die Parklfächen-App zeigt die Parkflächen für ausgewählte Stadtgebiete.",
+        "Die Daten werden tagesaktuell gehalten. Bei Änderungen versuchen wir, den Datenbestend immer sofort zu aktualisieren.",
+        "## App-Anbieter",
+        "Die App wird bereit gestellt von <a href=\"{{odp.anbieter.url}}\">{{odp.anbieter.name}}</a>",
+        "## Datenquelle",
+        "Die Daten kommen aus  unserem Open Data Portal <a href=\"{{odp.url}}\">{{odp.name}}</a>",
+        "Die Datenquelle ist in unserem Open Data Portal <a href=\"{{appinstanz.apiurl}}\">{{appinstanz.apiurl}}</a>.",
+        "## Über diese App",
+        "Die App wurde entwickelt von <a href=\"{{app.developer.url}}\">{{app.developer.name}}</a>. App-Version: {{app.version}}.",
+        "## Open Data App Store",
+        "Der Open Data App Store betrieben von <a href=\"{{odas.betreiber.url}}\">{{odas.betreiber.name}}</a>"
+      ],
+      "erforderlich": "ja"
+    },
+    "impressum": {
+      "label": "Impressum",
+      "hilfe": "Der Text wird im Menüpunkt 'Impressum' anzeigt",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": [
+        "_multiline_",
+        "### Anbieter",
+        "",
+        "{{{odp.anbieter.orgName}}}",
+        "{{{odp.anbieter.orgUnit}}}",
+        "",
+        "{{odp.anbieter.strasse}}",
+        "{{odp.anbieter.plzort}}",
+        "",
+        "Website: <a href='{{odp.anbieter.url-extern}}' target='_blank'>{{odp.anbieter.url-extern}}</a>",
+        "",
+        "### Ansprechpartner",
+        "",
+        "{{odp.anbieter.kontakt-bezeichnung}}",
+        "{{odp.anbieter.name}}",
+        "",
+        "### Kontakt",
+        "",
+        "Tel.: {{odp.anbieter.tel}}",
+        "E-Mail: <a href='mailto:{{odp.anbieter.email}}'>{{odp.anbieter.email}}</a>",
+        ""
+      ],
+      "erforderlich": "ja"
+    },
+    "datenschutz": {
+      "label": "Datenschutz",
+      "hilfe": "Der Text wird im Menüpunkt 'Datenschutz' anzeigt",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": ["_multiline_", "Alle Daten sind geschützt."],
+      "erforderlich": "ja"
+    },
+    "urldaten": {
+      "label": "URL zum Datensatz im ODP",
+      "hilfe": "Der Datensatz im Open Data Portal mit den CSV-Dateien der Parkflächen",
+      "format": {
+        "typ": "url"
+      },
+      "default": "{{appconfig.datensatz-url}}",
+      "beispiel": "https://open-data-musterstadt.ckan.de/dataset/parkflachen",
+      "erforderlich": "ja"
+    },
+    "fusszeile": {
+      "label": "Fußzeile",
+      "hilfe": "Wird auf der Website unten in der Fusszeile angezeigt.",
+      "format": {
+        "typ": "String",
+        "laenge": 50
+      },
+      "default": "(C) Copyright {{jahr}} | App & Daten: {{odp.anbieter.name}} | App-Entwickler: {{app.developer.name}} | ODAS: {{odas.betreiber.name}}",
+      "erforderlich": "ja"
+    },
+    "apiurl": {
+      "label": "URL zu den Daten",
+      "hilfe": "Von dieser URL zum Datensatz werden die Ressoucen bezogen",
+      "format": {
+        "typ": "url",
+        "laenge": 255
+      },
+      "default": "{{appconfig.datensatz-apiurl}}",
+      "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
+      "erforderlich": "ja"
+    },
+    "sprache": {
+      "label": "Sprache der App",
+      "hilfe": "Angabe der App-Sprache",
+      "format": {
+        "typ": "dropdown",
+        "optionen": ["de"],
+        "default": "de"
+      },
+      "erforderlich": "ja"
+    }
+  }
+}

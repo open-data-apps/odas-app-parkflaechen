@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="tab-title">ODAS Parkflächen App</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"
+    />
+    <link type="text/css" rel="stylesheet" href="app.css" />
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="app-base.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <a class="navbar-brand" href="#" id="navbar-logo">
+        <img
+          src="logo_ondics.png"
+          alt="Logo"
+          style="height: 40px"
+          id="logo-icon"
+        />
+        <span id="title-text">Open Data</span>
+      </a>
+      <!-- Toggler für mobile Geräte (rechts) -->
+      <button
+        class="navbar-toggler ms-auto"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Navigation umschalten"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto" id="navbar-links">
+          <li class="nav-item">
+            <a
+              href="#"
+              class="nav-link"
+              onclick="event.preventDefault(); loadPage('startseite')"
+              >Startseite</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              href="#"
+              class="nav-link"
+              onclick="event.preventDefault(); loadPage('beschreibung')"
+              >Über diese App</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              href="#"
+              class="nav-link"
+              onclick="event.preventDefault(); loadPage('kontakt')"
+              >Kontakt</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              href="#"
+              class="nav-link"
+              onclick="event.preventDefault(); loadPage('impressum')"
+              >Impressum</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              href="#"
+              class="nav-link"
+              onclick="event.preventDefault(); loadPage('datenschutz')"
+              >Datenschutz</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Dynamic Content -->
+    <div id="main-content" class="section"></div>
+
+    <!-- Sidebar for POIs -->
+    <div id="poiSidebar" class="poi-sidebar">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Suche Parkflächen"
+        class="form-control"
+      />
+      <h4></h4>
+      <ul id="poiList" class="list-group"></ul>
+      <footer class="sidebar-footer" id="sidebar-footer">
+        <p>&copy; 2025 ODAS Karten App. Alle Rechte vorbehalten.</p>
+      </footer>
+    </div>
+
+    <button class="btn btn-primary ms-auto" id="sidebartoggle">☰</button>
+  </body>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container text-center" id="footer-text">
+      <p>&copy; 2025 ODAS Karten App. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
+</html>

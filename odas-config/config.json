@@ -1,0 +1,16 @@
+{
+  "apiVersion": "1",
+  "titel": "Parkflächen",
+  "seitentitel": "ODAS App Parkflächen",
+  "icon": "logo_ondics.png",
+  "beschreibung": "",
+  "kontakt": "Tel.: <a href='tel:+49711310093100'>0711-31009-3100</a><br>Fax: <a href='tel:+49711310093108'>0711-31009-3108</a><br>E-Mail: <a href='mailto:info@ondics.de'>info@ondics.de</a>",
+  "impressum": "Ondics GmbH<br>Wolfgang Clauss<br>Blumenstrasse 19<br><a href='https://www.ondics.de/' target='_blank'>https://www.ondics.de/</a>",
+  "datenschutz": "",
+  "urlODP": "<a href='https://offenedaten.esslingen.de' target='_blank'>https://offenedaten.esslingen.de</a>",
+  "urlDaten": "<a href='https://offenedaten.esslingen.de/Ondics_GmbH' target='_blank'>https://offenedaten.esslingen.de/Ondics_GmbH</a>",
+  "fusszeile": "(C) Copyright 2025 | Inhalt: Stadt Esslingen | App: Mueller GmbH | Provided by: Ondics GmbH",
+  "apiurl": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
+  "dataSetName": "parkflachen",
+  "sprache": "de"
+}

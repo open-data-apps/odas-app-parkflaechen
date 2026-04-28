@@ -1,0 +1,43 @@
+{
+  "$schema": "https://frictionlessdata.io/schemas/table-schema.json",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "title": "Name",
+      "description": "Name des Parkplatzes oder der Parkfläche"
+    },
+    {
+      "name": "latitude",
+      "type": "number",
+      "title": "Breitengrad",
+      "description": "Geografischer Breitengrad der Parkfläche in Dezimalgrad"
+    },
+    {
+      "name": "longitude",
+      "type": "number",
+      "title": "Längengrad",
+      "description": "Geografischer Längengrad der Parkfläche in Dezimalgrad"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "title": "Beschreibung",
+      "description": "Detaillierte Beschreibung der Parkfläche"
+    },
+    {
+      "name": "freeSpaces",
+      "type": "integer",
+      "title": "Freie Parkplätze",
+      "description": "Aktuelle Anzahl der verfügbaren freien Parkplätze"
+    },
+    {
+      "name": "maxSpaces",
+      "type": "integer",
+      "title": "Maximale Parkplätze",
+      "description": "Gesamtanzahl der Parkplätze auf dieser Parkfläche"
+    }
+  ],
+  "primaryKey": "name",
+  "missingValues": ["", "null"]
+}
