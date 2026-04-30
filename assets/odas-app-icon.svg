@@ -1,78 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Hintergrund-Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7eb8f7"/>
+      <stop offset="100%" stop-color="#3d3fa5"/>
+    </linearGradient>
+    <!-- Schatten-Filter -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.30"/>
+    </filter>
+  </defs>
 
-<svg
-   width="512"
-   height="512"
-   viewBox="0 0 512 512"
-   version="1.1"
-   id="svg1"
-   inkscape:version="1.4.1-rc (832c77b156, 2025-02-28)"
-   sodipodi:docname="Parkflaechen_Logo.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="px"
-     inkscape:zoom="1.5683594"
-     inkscape:cx="255.6812"
-     inkscape:cy="217.74346"
-     inkscape:window-width="1920"
-     inkscape:window-height="1011"
-     inkscape:window-x="0"
-     inkscape:window-y="32"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <defs
-     id="defs1" />
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <!-- Hintergrund -->
-    <!-- Formularfeld -->
-    <!-- Simulierte Textzeilen im Formular -->
-    <!-- H\u00e4kchen -->
-    <!-- Hintergrund -->
-    <!-- Foto-Rahmen (wei\u00df) mit gefalteter Ecke -->
-    <!-- Hintergrund -->
-    <!-- Kalender Icon -->
-    <!-- Hintergrund -->
-    <!-- Kalender Icon -->
-    <!-- M\u00fcll-Termin Symbol (Trashcan) -->
-    <!-- Hintergrund mit abgerundeten Ecken -->
-    <rect
-       width="512"
-       height="512"
-       fill="#424242"
-       rx="50"
-       ry="50"
-       id="rect1"
-       x="0.12951432"
-       y="1.2515566" />
-    <!-- Standort-Pin als Symbol f\u00fcr den Parkplatz -->
-    <path
-       d="m 256.12951,33.251557 c -88.36,0 -159.999996,71.640003 -159.999996,160.000003 0,112 159.999996,288 159.999996,288 0,0 160,-176 160,-288 0,-88.36 -71.64,-160.000003 -160,-160.000003 z m 0,224.000003 c -35.29,0 -64,-28.71 -64,-64 0,-35.29 28.71,-64 64,-64 35.29,0 64,28.71 64,64 0,35.29 -28.71,64 -64,64 z"
-       fill="#ffffff"
-       id="path1" />
-    <!-- Buchstabe "P" als Kennzeichen f\u00fcr "Parkplatz" -->
-    <text
-       x="256.12952"
-       y="211.25156"
-       text-anchor="middle"
-       fill="#4caf50"
-       font-size="80px"
-       font-family="Arial"
-       font-weight="bold"
-       id="text1">P</text>
+  <!-- Hintergrund -->
+  <rect width="512" height="512" rx="108" ry="108" fill="url(#bgGrad)"/>
+
+  <!-- Optional: Glanz-Overlay oben-links -->
+  <ellipse cx="160" cy="140" rx="180" ry="160" fill="white" fill-opacity="0.07"/>
+
+  <!-- Motiv: Parkflächen -->
+  <g filter="url(#shadow)">
+    <!-- P-Schild Form -->
+    <rect x="146" y="126" width="220" height="260" rx="24" fill="none" stroke="#ffffff" stroke-width="28"/>
+    <!-- Das "P" -->
+    <path d="M 220 180 L 220 330" stroke="#ffffff" stroke-width="32" stroke-linecap="round"/>
+    <path d="M 220 180 L 280 180 C 310 180 320 200 320 220 C 320 240 310 260 280 260 L 220 260" fill="none" stroke="#ffffff" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
