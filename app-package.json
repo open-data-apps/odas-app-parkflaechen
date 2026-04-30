@@ -24,9 +24,17 @@
     "* Als URL muss ein Link zum Datensatz angegeben werden. Beispiel:",
     "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen"
   ],
-  "tags-funktion": ["Stadtinformation", "Verkehr"],
-  "tags-dateityp": ["csv"],
-  "tags-datenart": ["Geodaten", "Live-Daten"],
+  "tags-funktion": [
+    "Stadtinformation",
+    "Verkehr"
+  ],
+  "tags-dateityp": [
+    "csv"
+  ],
+  "tags-datenart": [
+    "Geodaten",
+    "Live-Daten"
+  ],
   "screenshots": [
     "docs/Desktop_Screenshot.png",
     "docs/Mobile_Screenshot_1.png",
@@ -150,7 +158,10 @@
       "format": {
         "typ": "markdown"
       },
-      "default": ["_multiline_", "Alle Daten sind geschützt."],
+      "default": [
+        "_multiline_",
+        "Alle Daten sind geschützt."
+      ],
       "erforderlich": "ja"
     },
     "urldaten": {
@@ -189,10 +200,30 @@
       "hilfe": "Angabe der App-Sprache",
       "format": {
         "typ": "dropdown",
-        "optionen": ["de"],
+        "optionen": [
+          "de"
+        ],
         "default": "de"
       },
       "erforderlich": "ja"
+    },
+    "urlDaten": {
+      "label": "URL zum Datensatz im ODP",
+      "hilfe": "Der Datensatz im Open Data Portal mit den Daten der Parkflächen App",
+      "format": {
+        "typ": "url"
+      },
+      "default": "",
+      "beispiel": "",
+      "erforderlich": "ja"
     }
-  }
+  },
+  "daten": {
+    "beschreibung": "Die Parkflächen-App verarbeitet konfigurierbare Open-Data-Ressourcen aus dem Open Data Portal (z.B. JSON- oder CSV-Endpunkte).",
+    "schema": "",
+    "beispiel": "",
+    "beispiel-url": ""
+  },
+  "branding-css": "",
+  "api-version": "1"
 }
