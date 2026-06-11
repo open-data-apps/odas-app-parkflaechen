@@ -11,6 +11,5 @@
   "urlDaten": "<a href='https://offenedaten.esslingen.de/Ondics_GmbH' target='_blank'>https://offenedaten.esslingen.de/Ondics_GmbH</a>",
   "fusszeile": "(C) Copyright 2025 | Inhalt: Stadt Esslingen | App: Mueller GmbH | Provided by: Ondics GmbH",
   "apiurl": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
-  "dataSetName": "parkflachen",
   "sprache": "de"
 }

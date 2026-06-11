@@ -6,10 +6,9 @@
  * @returns {string} - darzustellendes HTML
  */
 let map;
-function app() {
-  const mainContent = document.getElementById("main-content");
+function app(configdata, enclosingHtmlDivElement) {
   const poiSidebar = document.getElementById("poiSidebar");
-  document.getElementById("main-content").innerHTML = `<header class="header">
+  enclosingHtmlDivElement.innerHTML = `<header class="header">
         <h1>Points of Interest</h1>
       <div id="map"></div>`;
   initializeMap();
@@ -126,7 +125,7 @@ async function updateMap() {
 
       // CKAN Datastore API URL
       const datastoreApiUrl =
-        "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search";
+        new URL(configData.apiurl).origin + "/api/3/action/datastore_search";
       const query = `?resource_id=${resourceId}`;
       // Proxy-Endpunkt bauen
       const fullPath = window.location.pathname.replace(/\/+$/, "");
@@ -218,7 +217,7 @@ async function initializeMap() {
 
       // CKAN Datastore API URL
       const datastoreApiUrl =
-        "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search";
+        new URL(configData.apiurl).origin + "/api/3/action/datastore_search";
       const query = `?resource_id=${resourceId}`;
       // Proxy-Endpunkt bauen
       const fullPath = window.location.pathname.replace(/\/+$/, "");
@@ -293,6 +292,7 @@ async function initializeMap() {
     document
       .getElementById("sidebartoggle")
       .addEventListener("click", function () {
+        const poiSidebar = document.getElementById("poiSidebar");
         if (poiSidebar.style.visibility === "hidden") {
           poiSidebar.style.visibility = "visible";
         } else {
@@ -307,7 +307,7 @@ async function initializeMap() {
 async function getAllResourceNamesAndIdsFromDataset(datasetId) {
   try {
     // CKAN package_show API URL
-    const apiUrl = `https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=${datasetId}`;
+    const apiUrl = `${new URL(configData.apiurl).origin}/api/3/action/package_show?id=${datasetId}`;
     // Proxy-Endpunkt bauen
     const fullPath = window.location.pathname.replace(/\/+$/, "");
     const proxyEndpoint = `${fullPath}/odp-data?path=${extractPathFromUrl(
@@ -375,3 +375,11 @@ function formatTextWithLineBreaks(text) {
       '<a href="tel:$1" class="phone-link">$1</a>'
     );
 }
+
+/*
+ * Diese Funktion kann Bibliotheken und benötigte Skripte laden.
+ * Sie hängt den zurückgegebenen HTML Code in die Head Section an.
+
+ * @returns {string} - HTML mit script, link, etc. Tags
+ */
+function addToHead() {}

@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     configData = await fetchConfig(configUrl); // Zuweisung zu globaler Variable
+    addToHead();
     updatePageContent();
     loadPage("startseite");
   } catch (err) {
@@ -96,9 +97,10 @@ function updatePageContent() {
 
 async function loadPage(page) {
   let content;
+  const mainContent = document.getElementById("main-content");
   switch (page) {
     case "startseite":
-      app();
+      app(configData, mainContent);
       break;
     case "kontakt":
       content = createPageContent("Kontakt", configData.kontakt);
@@ -117,9 +119,9 @@ async function loadPage(page) {
   }
   if (page === "startseite") {
   } else {
-    document.getElementById("main-content").innerHTML = content;
+    mainContent.innerHTML = content;
     document.getElementById("sidebartoggle").style.visibility = "hidden";
-    poiSidebar.style.display = "none";
+    document.getElementById("poiSidebar").style.display = "none";
   }
 }
 

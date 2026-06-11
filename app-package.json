@@ -5,7 +5,7 @@
   "name": "Parkflächen",
   "version": "1.0.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
-  "app-icon": "assets/app-icon.png",
+  "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": [
     "Wo gibt’s freie Parkplätze? Diese App zeigt verfügbare Parkflächen – inklusive Auslastung und maximaler Kapazität.",
     "Ideal für Städte, die den ruhenden Verkehr besser managen wollen."
@@ -36,9 +36,9 @@
     "Live-Daten"
   ],
   "screenshots": [
-    "docs/Desktop_Screenshot.png",
-    "docs/Mobile_Screenshot_1.png",
-    "docs/Mobile_Screenshot_2.png"
+    "assets/Desktop_Screenshot.png",
+    "assets/Mobile_Screenshot_1.png",
+    "assets/Mobile_Screenshot_2.png"
   ],
   "apiversion": "1",
   "instanz-config": {
@@ -164,16 +164,6 @@
       ],
       "erforderlich": "ja"
     },
-    "urldaten": {
-      "label": "URL zum Datensatz im ODP",
-      "hilfe": "Der Datensatz im Open Data Portal mit den CSV-Dateien der Parkflächen",
-      "format": {
-        "typ": "url"
-      },
-      "default": "{{appconfig.datensatz-url}}",
-      "beispiel": "https://open-data-musterstadt.ckan.de/dataset/parkflachen",
-      "erforderlich": "ja"
-    },
     "fusszeile": {
       "label": "Fußzeile",
       "hilfe": "Wird auf der Website unten in der Fusszeile angezeigt.",
@@ -209,12 +199,12 @@
     },
     "urlDaten": {
       "label": "URL zum Datensatz im ODP",
-      "hilfe": "Der Datensatz im Open Data Portal mit den Daten der Parkflächen App",
+      "hilfe": "Der Datensatz im Open Data Portal mit den CSV-Dateien der Parkflächen",
       "format": {
         "typ": "url"
       },
-      "default": "",
-      "beispiel": "",
+      "default": "{{appconfig.datensatz-url}}",
+      "beispiel": "https://open-data-musterstadt.ckan.de/dataset/parkflachen",
       "erforderlich": "ja"
     }
   },
