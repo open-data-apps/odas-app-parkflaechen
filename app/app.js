@@ -6,27 +6,24 @@
  * @returns {string} - darzustellendes HTML
  */
 let map;
+let markerClusterGroup;
+
 function app(configdata, enclosingHtmlDivElement) {
   const poiSidebar = document.getElementById("poiSidebar");
-  enclosingHtmlDivElement.innerHTML = `<header class="header">
-        <h1>Points of Interest</h1>
-      <div id="map"></div>`;
+  enclosingHtmlDivElement.innerHTML = `
+    <header class="header">
+      <h1>Points of Interest</h1>
+    </header>
+    <div id="map"></div>
+  `;
   initializeMap();
   poiSidebar.style.display = "block"; // Zeige die Sidebar an
-  const mediaQuery = window.matchMedia("(max-width: 768px)");
-  function handleMediaQueryChange(e) {
-    if (e.matches) {
-      const sidebartoggle = document.getElementById("sidebartoggle");
-      sidebartoggle.style.visibility = "visible";
-    }
-  }
-  handleMediaQueryChange(mediaQuery);
-  mediaQuery.addListener(handleMediaQueryChange);
 }
+
 function startAutoRefresh() {
   setInterval(async () => {
     console.log("Daten werden aktualisiert...");
-    await updateMap(); // Aktualisiere die Karte
+    await updateMap(false); // Aktualisiere die Karte im Hintergrund ohne Bounds-Reset
   }, 30000); // Aktualisierung alle 30 Sekunden
 }
 
@@ -47,7 +44,7 @@ function extractPathFromUrl(url) {
 /**
  * Erstellt Marker und Listeneinträge für POIs und fügt sie dem Cluster und der Liste hinzu.
  */
-function renderPOIsOnMapAndSidebar(poiGroups, markerClusterGroup, poiList) {
+function renderPOIsOnMapAndSidebar(poiGroups, targetClusterGroup, poiList) {
   poiList.innerHTML = "";
   Object.keys(poiGroups).forEach((resourceName) => {
     const resourceHeader = document.createElement("h5");
@@ -71,13 +68,13 @@ function renderPOIsOnMapAndSidebar(poiGroups, markerClusterGroup, poiList) {
         .bindPopup(popupContent)
         .bindTooltip(`${freeSpaces} freie Plätze`, { permanent: true });
 
-      markerClusterGroup.addLayer(marker);
+      targetClusterGroup.addLayer(marker);
 
       const poiItem = document.createElement("li");
       poiItem.classList.add("list-group-item");
       poiItem.textContent = `${poi.name} (${freeSpaces} frei)`;
       poiItem.addEventListener("click", () => {
-        markerClusterGroup.zoomToShowLayer(marker, () => {
+        targetClusterGroup.zoomToShowLayer(marker, () => {
           marker.openPopup();
         });
       });
@@ -86,236 +83,172 @@ function renderPOIsOnMapAndSidebar(poiGroups, markerClusterGroup, poiList) {
   });
 }
 
-async function updateMap() {
-  const poiNames = new Set();
-  const markerClusterGroup = L.markerClusterGroup({
-    iconCreateFunction: function (cluster) {
-      const totalFreeSpaces = cluster
-        .getAllChildMarkers()
-        .reduce((sum, marker) => sum + (marker.options.freeSpaces || 0), 0);
-      return L.divIcon({
-        html: `<div class="custom-cluster-icon">${totalFreeSpaces}</div>`,
-        className: "marker-cluster",
-        iconSize: [40, 40],
-      });
-    },
-  });
+/**
+ * Holt die Daten für eine einzelne Ressource vom Proxy-Server.
+ */
+async function fetchResourceRecords(resourceId) {
+  const datastoreApiUrl = new URL(configData.apiurl).origin + "/api/3/action/datastore_search";
+  const query = `?resource_id=${resourceId}`;
+  const fullPath = window.location.pathname.replace(/\/+$/, "");
+  const proxyEndpoint = `${fullPath}/odp-data?path=${extractPathFromUrl(datastoreApiUrl + query)}`;
 
+  const response = await fetch(proxyEndpoint, { method: "POST" });
+  if (!response.ok) {
+    throw new Error(`HTTP-Fehler ${response.status}`);
+  }
+
+  const proxyData = await response.json();
+  const data = JSON.parse(proxyData.content);
+
+  if (!data || !data.result || !data.result.records) {
+    throw new Error("Ungültige Antwortstruktur");
+  }
+
+  return data.result.records;
+}
+
+async function updateMap(fitBounds = false) {
   try {
-    // Speichere die aktuelle Ansicht
-    const currentView = {
-      center: map.getCenter(),
-      zoom: map.getZoom(),
-    };
+    if (!map) {
+      console.log("Karte nicht aktiv. Aktualisierung übersprungen.");
+      return;
+    }
 
     // Dataset-Wert aus der API-URL extrahieren
     const dataset = new URL(configData.apiurl).searchParams.get("id");
+    if (!dataset) {
+      throw new Error("Keine Dataset-ID in der apiurl gefunden.");
+    }
 
     // Ressourcen-IDs und Namen abrufen (über Proxy)
     const resources = await getAllResourceNamesAndIdsFromDataset(dataset);
-
     if (resources.length === 0) {
-      throw new Error("Keine Ressourcen gefunden");
+      throw new Error("Keine Ressourcen im Dataset gefunden");
     }
 
+    const poiNames = new Set();
     const poiGroups = {};
+
+    // Erstelle temporär ein neues Cluster, um Flackern zu minimieren
+    const newClusterGroup = L.markerClusterGroup({
+      iconCreateFunction: function (cluster) {
+        const totalFreeSpaces = cluster
+          .getAllChildMarkers()
+          .reduce((sum, marker) => sum + (marker.options.freeSpaces || 0), 0);
+        return L.divIcon({
+          html: `<div class="custom-cluster-icon">${totalFreeSpaces}</div>`,
+          className: "marker-cluster",
+          iconSize: [40, 40],
+        });
+      },
+    });
 
     for (const resource of resources) {
       const { id: resourceId, name: resourceName } = resource;
-
-      // CKAN Datastore API URL
-      const datastoreApiUrl =
-        new URL(configData.apiurl).origin + "/api/3/action/datastore_search";
-      const query = `?resource_id=${resourceId}`;
-      // Proxy-Endpunkt bauen
-      const fullPath = window.location.pathname.replace(/\/+$/, "");
-      const proxyEndpoint = `${fullPath}/odp-data?path=${extractPathFromUrl(
-        datastoreApiUrl + query
-      )}`;
-
-      const response = await fetch(proxyEndpoint, { method: "POST" });
-      const proxyData = await response.json();
-      let data;
       try {
-        data = JSON.parse(proxyData.content);
-      } catch (e) {
-        console.warn(
-          `Fehler beim Parsen der Daten für Ressource ${resourceId}`
-        );
-        continue;
-      }
-
-      if (
-        !data ||
-        !data.result ||
-        !data.result.records ||
-        data.result.records.length === 0
-      ) {
-        console.warn(`Keine POIs gefunden für die Ressource ID: ${resourceId}`);
-        continue;
-      }
-
-      if (!poiGroups[resourceName]) {
-        poiGroups[resourceName] = [];
-      }
-
-      data.result.records.forEach((poi) => {
-        if (poiNames.has(poi.name)) {
-          return;
+        const records = await fetchResourceRecords(resourceId);
+        if (records.length === 0) {
+          console.warn(`Keine POIs gefunden für Ressource ID: ${resourceId}`);
+          continue;
         }
-        poiNames.add(poi.name);
-        poiGroups[resourceName].push(poi);
-      });
+
+        if (!poiGroups[resourceName]) {
+          poiGroups[resourceName] = [];
+        }
+
+        records.forEach((poi) => {
+          if (poiNames.has(poi.name)) {
+            return;
+          }
+          poiNames.add(poi.name);
+          poiGroups[resourceName].push(poi);
+        });
+      } catch (e) {
+        console.warn(`Fehler beim Laden der Ressource "${resourceName}" (${resourceId}):`, e);
+      }
     }
 
+    // Render in Sidebar und auf die temporäre Cluster-Gruppe
     renderPOIsOnMapAndSidebar(
       poiGroups,
-      markerClusterGroup,
+      newClusterGroup,
       document.getElementById("poiList")
     );
+
+    // Entferne die alte Cluster-Gruppe falls vorhanden
+    if (markerClusterGroup) {
+      try {
+        map.removeLayer(markerClusterGroup);
+      } catch (e) {
+        console.warn("Fehler beim Entfernen der alten Cluster-Gruppe:", e);
+      }
+    }
+
+    // Setze die neue Cluster-Gruppe auf die Karte
+    markerClusterGroup = newClusterGroup;
     map.addLayer(markerClusterGroup);
+
+    if (fitBounds && markerClusterGroup.getLayers().length > 0) {
+      map.fitBounds(markerClusterGroup.getBounds(), { maxZoom: 5 });
+    }
   } catch (error) {
     console.error("Fehler beim Laden der Daten:", error);
   }
 }
 
 async function initializeMap() {
+  if (typeof map !== 'undefined' && map) {
+    try {
+      map.remove();
+    } catch (e) {
+      console.warn("Fehler beim Entfernen der Leaflet-Karte in initializeMap:", e);
+    }
+    map = null;
+  }
+  
   map = L.map("map").setView([51.1657, 10.4515], 4);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
   }).addTo(map);
 
-  const poiNames = new Set();
-  const markerClusterGroup = L.markerClusterGroup({
-    iconCreateFunction: function (cluster) {
-      const totalFreeSpaces = cluster
-        .getAllChildMarkers()
-        .reduce((sum, marker) => sum + (marker.options.freeSpaces || 0), 0);
-      return L.divIcon({
-        html: `<div class="custom-cluster-icon">${totalFreeSpaces}</div>`,
-        className: "marker-cluster",
-        iconSize: [40, 40],
+  setupEventListeners();
+
+  // Initiales Laden der Karte mit Bounds-Zentrierung
+  await updateMap(true);
+}
+
+function setupEventListeners() {
+  // Event-Listener überschreiben, um doppelte Listener bei Navigation zu verhindern
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.onkeyup = function () {
+      let filter = this.value.toLowerCase();
+      let items = document.querySelectorAll("#poiList .list-group-item");
+      items.forEach((item) => {
+        let text = item.textContent.toLowerCase();
+        item.style.display = text.includes(filter) ? "" : "none";
       });
-    },
-  });
+    };
+  }
 
-  try {
-    // Dataset-Wert aus der API-URL extrahieren
-    const dataset = new URL(configData.apiurl).searchParams.get("id");
-
-    // Ressourcen-IDs und Namen abrufen (über Proxy)
-    const resources = await getAllResourceNamesAndIdsFromDataset(dataset);
-
-    if (resources.length === 0) {
-      throw new Error("Keine Ressourcen gefunden");
-    }
-
-    const poiGroups = {};
-
-    for (const resource of resources) {
-      const { id: resourceId, name: resourceName } = resource;
-
-      // CKAN Datastore API URL
-      const datastoreApiUrl =
-        new URL(configData.apiurl).origin + "/api/3/action/datastore_search";
-      const query = `?resource_id=${resourceId}`;
-      // Proxy-Endpunkt bauen
-      const fullPath = window.location.pathname.replace(/\/+$/, "");
-      const proxyEndpoint = `${fullPath}/odp-data?path=${extractPathFromUrl(
-        datastoreApiUrl + query
-      )}`;
-
-      const response = await fetch(proxyEndpoint, { method: "POST" });
-      const proxyData = await response.json();
-      let data;
-      try {
-        data = JSON.parse(proxyData.content);
-      } catch (e) {
-        console.warn(
-          `Fehler beim Parsen der Daten für Ressource ${resourceId}`
-        );
-        continue;
+  const sidebartoggle = document.getElementById("sidebartoggle");
+  if (sidebartoggle) {
+    sidebartoggle.onclick = function () {
+      const poiSidebar = document.getElementById("poiSidebar");
+      if (poiSidebar) {
+        poiSidebar.classList.toggle("show");
       }
-
-      if (
-        !data ||
-        !data.result ||
-        !data.result.records ||
-        data.result.records.length === 0
-      ) {
-        console.warn(`Keine POIs gefunden für die Ressource ID: ${resourceId}`);
-        continue;
-      }
-
-      if (!poiGroups[resourceName]) {
-        poiGroups[resourceName] = [];
-      }
-
-      data.result.records.forEach((poi) => {
-        if (poiNames.has(poi.name)) {
-          return;
-        }
-        poiNames.add(poi.name);
-        poiGroups[resourceName].push(poi);
-      });
-    }
-
-    renderPOIsOnMapAndSidebar(
-      poiGroups,
-      markerClusterGroup,
-      document.getElementById("poiList")
-    );
-    map.addLayer(markerClusterGroup);
-    map.fitBounds(markerClusterGroup.getBounds(), { maxZoom: 5 });
-
-    document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
-      link.addEventListener("click", () => {
-        const navbarToggler = document.querySelector(".navbar-toggler");
-        const navbarCollapse = document.querySelector(".navbar-collapse");
-        if (navbarCollapse.classList.contains("show")) {
-          navbarToggler.click();
-        }
-      });
-    });
-
-    document
-      .getElementById("searchInput")
-      .addEventListener("keyup", function () {
-        let filter = this.value.toLowerCase();
-        let items = document.querySelectorAll("#poiList .list-group-item");
-        items.forEach((item) => {
-          let text = item.textContent.toLowerCase();
-          item.style.display = text.includes(filter) ? "" : "none";
-        });
-      });
-
-    document
-      .getElementById("sidebartoggle")
-      .addEventListener("click", function () {
-        const poiSidebar = document.getElementById("poiSidebar");
-        if (poiSidebar.style.visibility === "hidden") {
-          poiSidebar.style.visibility = "visible";
-        } else {
-          poiSidebar.style.visibility = "hidden";
-        }
-      });
-  } catch (error) {
-    console.error("Fehler beim Laden der Daten:", error);
+    };
   }
 }
 
 async function getAllResourceNamesAndIdsFromDataset(datasetId) {
   try {
-    // CKAN package_show API URL
     const apiUrl = `${new URL(configData.apiurl).origin}/api/3/action/package_show?id=${datasetId}`;
-    // Proxy-Endpunkt bauen
     const fullPath = window.location.pathname.replace(/\/+$/, "");
-    const proxyEndpoint = `${fullPath}/odp-data?path=${extractPathFromUrl(
-      apiUrl
-    )}`;
+    const proxyEndpoint = `${fullPath}/odp-data?path=${extractPathFromUrl(apiUrl)}`;
 
     const response = await fetch(proxyEndpoint, { method: "POST" });
-
     if (!response.ok) {
       throw new Error("Fehler beim Abrufen der Ressourcen-Informationen");
     }
@@ -338,48 +271,20 @@ async function getAllResourceNamesAndIdsFromDataset(datasetId) {
       throw new Error("Keine Ressourcen gefunden für das angegebene Dataset");
     }
 
-    // Extrahieren von IDs und Namen der Ressourcen
-    const resources = data.result.resources.map((resource) => ({
+    return data.result.resources.map((resource) => ({
       id: resource.id,
       name: resource.name || "Unbekannte Ressource",
     }));
-
-    return resources; // Rückgabe eines Arrays von Objekten mit ID und Name
   } catch (error) {
     console.error("Fehler beim Abrufen der Ressource-Informationen:", error);
     return [];
   }
 }
 
-function parseCSV(csvText) {
-  const rows = csvText.trim().split("\n").slice(1);
-  return rows.map((row) => {
-    const [name, latitude, longitude, description, freeSpaces, maxSpaces] =
-      row.split(",");
-    return {
-      name,
-      latitude: parseFloat(latitude),
-      longitude: parseFloat(longitude),
-      description,
-      freeSpaces: parseInt(freeSpaces, 10),
-      maxSpaces: parseInt(maxSpaces, 10),
-    };
-  });
-}
-
-function formatTextWithLineBreaks(text) {
-  return text
-    .replace(/\n/g, "<br>")
-    .replace(
-      /(\+?\d[\d\s()-]{4,}\d)/g,
-      '<a href="tel:$1" class="phone-link">$1</a>'
-    );
-}
-
 /*
  * Diese Funktion kann Bibliotheken und benötigte Skripte laden.
  * Sie hängt den zurückgegebenen HTML Code in die Head Section an.
-
+ *
  * @returns {string} - HTML mit script, link, etc. Tags
  */
 function addToHead() {}
