@@ -3,7 +3,7 @@
   "app-entwickler-name": "mueller-gmbh",
   "name-in-url": "parkflaechen",
   "name": "Parkflächen",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": [
@@ -107,13 +107,16 @@
       },
       "default": [
         "_multiline_",
-        "Die Parklfächen-App zeigt die Parkflächen für ausgewählte Stadtgebiete.",
-        "Die Daten werden tagesaktuell gehalten. Bei Änderungen versuchen wir, den Datenbestend immer sofort zu aktualisieren.",
+        "Die Parkflächen-App zeigt die aktuelle Auslastung öffentlicher Parkflächen auf einer interaktiven Karte.",
+        "Die Daten werden über die CKAN-API aus dem Open Data Portal geladen und alle 30 Sekunden aktualisiert.",
+        "## Für wen ist diese App?",
+        "Diese App zeigt die aktuelle Auslastung öffentlicher Parkflächen. Sie richtet sich an Autofahrer:innen, die schnell einen freien Parkplatz finden möchten.",
         "## App-Anbieter",
         "Die App wird bereit gestellt von <a href=\"{{odp.anbieter.url}}\">{{odp.anbieter.name}}</a>",
         "## Datenquelle",
-        "Die Daten kommen aus  unserem Open Data Portal <a href=\"{{odp.url}}\">{{odp.name}}</a>",
-        "Die Datenquelle ist in unserem Open Data Portal <a href=\"{{appinstanz.apiurl}}\">{{appinstanz.apiurl}}</a>.",
+        "- **Open Data Portal:** <a href=\"{{odp.url}}\">{{odp.name}}</a>",
+        "- **Datensatz:** <a href=\"{{appinstanz.urlDaten}}\" target=\"_blank\">Parkflächen-Datensatz</a>",
+        "- **Ressource:** <a href=\"{{appinstanz.apiurl}}\" target=\"_blank\">CKAN package_show API</a>",
         "## Über diese App",
         "Die App wurde entwickelt von <a href=\"{{app.developer.url}}\">{{app.developer.name}}</a>. App-Version: {{app.version}}.",
         "## Open Data App Store",
@@ -164,6 +167,20 @@
       ],
       "erforderlich": "ja"
     },
+    "datenStand": {
+      "label": "Datenstand",
+      "hilfe": "Freitext-Datum, z.B. 'Stand: Januar 2025'. Leer = ausgeblendet.",
+      "format": { "typ": "string", "laenge": 60 },
+      "default": "",
+      "erforderlich": "nein"
+    },
+    "datenquelleHinweis": {
+      "label": "Methodik / Datenquelle-Hinweis",
+      "hilfe": "Herkunft, Erhebungsmethode, Limitierungen (Markdown/HTML). Leer = ausgeblendet.",
+      "format": { "typ": "markdown" },
+      "default": "Die Parkflächendaten werden über die CKAN API geladen. Zunächst werden die verfügbaren CSV-Ressourcen über package_show ermittelt, dann die eigentlichen Datensätze über datastore_search abgerufen. Die Daten werden alle 30 Sekunden automatisch aktualisiert. Freie Parkplätze werden je nach Datenquelle über Sensoren oder manuelle Zählung ermittelt.",
+      "erforderlich": "nein"
+    },
     "fusszeile": {
       "label": "Fußzeile",
       "hilfe": "Wird auf der Website unten in der Fusszeile angezeigt.",
@@ -196,6 +213,13 @@
         "default": "de"
       },
       "erforderlich": "ja"
+    },
+    "weiterfuehrendeLinks": {
+      "label": "Weiterführende Links",
+      "hilfe": "Verwandte Datensätze / Hintergrundquellen (Markdown/HTML). Leer = ausgeblendet.",
+      "format": { "typ": "markdown" },
+      "default": "<ul><li><a href=\"https://open-data-musterstadt.ckan.de/dataset/parkflachen\" target=\"_blank\">CKAN-Datensatz Parkflächen</a></li><li><a href=\"https://www.example.com/parkraumbewirtschaftung\" target=\"_blank\">Parkraumbewirtschaftung — Stadtverwaltung</a></li></ul>",
+      "erforderlich": "nein"
     },
     "urlDaten": {
       "label": "URL zum Datensatz im ODP",

@@ -8,16 +8,74 @@
 let map;
 let markerClusterGroup;
 
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function renderWeitereInfos(configdata) {
+  const links = String(configdata.weiterfuehrendeLinks || "").trim();
+  if (!links) return "";
+  return (
+    '<section class="pf-weitere-infos mt-4">' +
+    '<h2 class="h5 mb-3">Weitere Informationen</h2>' +
+    '<div class="pf-weitere-infos-content">' +
+    links +
+    "</div></section>"
+  );
+}
+
+function renderMethodikbox(configdata) {
+  const hinweis = String(configdata.datenquelleHinweis || "").trim();
+  const stand = String(configdata.datenStand || "").trim();
+  if (!hinweis && !stand) return "";
+  const standHtml = stand
+    ? '<p class="text-muted small mb-2">' + escapeHtml(stand) + "</p>"
+    : "";
+  return (
+    '<section class="pf-methodik mt-3">' +
+    '<button class="pf-methodik-toggle collapsed" type="button" ' +
+    'data-bs-toggle="collapse" data-bs-target="#pf-methodik-body" ' +
+    'aria-expanded="false" aria-controls="pf-methodik-body">' +
+    '<h2 class="h5 mb-0">Methodik &amp; Datenquelle</h2>' +
+    '<span class="pf-methodik-chevron" aria-hidden="true">&#9662;</span>' +
+    "</button>" +
+    '<div id="pf-methodik-body" class="collapse">' +
+    '<div class="pf-methodik-content">' +
+    standHtml +
+    hinweis +
+    "</div></div></section>"
+  );
+}
+
 function app(configdata, enclosingHtmlDivElement) {
   const poiSidebar = document.getElementById("poiSidebar");
   enclosingHtmlDivElement.innerHTML = `
     <header class="header">
-      <h1>Points of Interest</h1>
+      <h1>${escapeHtml(configdata.titel || "Points of Interest")}</h1>
+      <div id="pf-datenstand-wrap"></div>
     </header>
     <div id="map"></div>
+    <div id="pf-methodik-wrap"></div>
+    <div id="pf-weitere-infos-wrap"></div>
   `;
+  const methodikHtml = renderMethodikbox(configdata);
+  if (methodikHtml) {
+    const mel = enclosingHtmlDivElement.querySelector("#pf-methodik-wrap");
+    if (mel) mel.innerHTML = methodikHtml;
+  }
+  const weitereHtml = renderWeitereInfos(configdata);
+  if (weitereHtml) {
+    const wel = enclosingHtmlDivElement.querySelector("#pf-weitere-infos-wrap");
+    if (wel) wel.innerHTML = weitereHtml;
+  }
   initializeMap();
-  poiSidebar.style.display = "block"; // Zeige die Sidebar an
+  poiSidebar.style.display = "block";
 }
 
 function startAutoRefresh() {
@@ -121,9 +179,18 @@ async function updateMap(fitBounds = false) {
     }
 
     // Ressourcen-IDs und Namen abrufen (über Proxy)
-    const resources = await getAllResourceNamesAndIdsFromDataset(dataset);
+    const { resources, metadataModified } = await getAllResourceNamesAndIdsFromDataset(dataset);
     if (resources.length === 0) {
       throw new Error("Keine Ressourcen im Dataset gefunden");
+    }
+
+    // Datenfrische anzeigen
+    if (metadataModified) {
+      const d = new Date(metadataModified);
+      if (!isNaN(d.getTime())) {
+        const dsWrap = document.getElementById("pf-datenstand-wrap");
+        if (dsWrap) dsWrap.innerHTML = '<div class="text-muted small">Aktualisiert: ' + escapeHtml(d.toLocaleDateString("de-DE")) + '</div>';
+      }
     }
 
     const poiNames = new Set();
@@ -259,7 +326,7 @@ async function getAllResourceNamesAndIdsFromDataset(datasetId) {
       data = JSON.parse(proxyData.content);
     } catch (e) {
       console.error("Fehler beim Parsen der Ressourcen-Informationen:", e);
-      return [];
+      return { resources: [], metadataModified: null };
     }
 
     if (
@@ -271,13 +338,13 @@ async function getAllResourceNamesAndIdsFromDataset(datasetId) {
       throw new Error("Keine Ressourcen gefunden für das angegebene Dataset");
     }
 
-    return data.result.resources.map((resource) => ({
+    return { resources: data.result.resources.map((resource) => ({
       id: resource.id,
       name: resource.name || "Unbekannte Ressource",
-    }));
+    })), metadataModified: data.result.metadata_modified || null };
   } catch (error) {
     console.error("Fehler beim Abrufen der Ressource-Informationen:", error);
-    return [];
+    return { resources: [], metadataModified: null };
   }
 }
 

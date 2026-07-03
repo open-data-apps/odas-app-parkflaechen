@@ -1,304 +1,57 @@
-/* General Styling */
-html,
-body {
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  font-family: "Arial", sans-serif;
-  background-color: #f5f5f5;
+.pf-methodik {
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.5rem;
+  background: var(--bs-body-bg);
+  overflow: hidden;
 }
 
-.group-header {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-top: 5%;
-  margin-bottom: 5%;
-}
-
-.section {
-  padding-top: 80px;
-  margin-left: 15px;
-}
-
-.content-body {
-  margin: 0 18.35% 0 18.35%;
-}
-
-#searchInput {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-/* Navbar */
-.navbar {
-  z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: #ffffff;
-  transition: background-color 0.3s ease;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  animation: fadeSlideDown 0.5s ease-in;
-}
-.navbar:hover {
-  background-color: #f1f1f1;
-}
-
-.header h1 {
-  font-size: 2rem;
-  text-align: center;
-  margin-top: 80px;
-  color: #333;
-  transition: color 0.3s ease;
-}
-.header h1:hover {
-  color: #007bff;
-}
-
-#title-text {
-  margin-left: 25px;
-}
-
-/* Map */
-#map {
-  height: calc(100vh - 60px);
-  width: calc(100% - 200px);
-  position: absolute;
-  top: 60px;
-  left: 0;
-  transition: opacity 0.5s ease;
-}
-
-/* Marker Icon mit Anzahl der Parkplätze */
-.custom-cluster-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #006fd6;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  border: 2px solid white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-/* Sidebar */
-.poi-sidebar {
-  position: fixed;
-  top: 60px;
-  right: 0;
-  width: 200px;
-  height: calc(100vh - 60px);
-  background-color: #ffffff;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  overflow-y: auto;
-  z-index: 999;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-.sidebar-footer {
-  margin-top: auto;
-  padding-top: 20px;
-  text-align: center;
-  font-size: 12px;
-  color: #333;
-}
-.poi-sidebar h4 {
-  font-size: 1.2rem;
-  color: #333;
-}
-
-.list-group-item {
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.list-group-item:hover {
-  background-color: #007bff;
-  color: white;
-  transform: scale(1.02);
-}
-
-.leaflet-control-zoom {
-  position: absolute;
-  top: 60px;
-}
-
-.navbar-nav {
-  display: flex;
-  text-align: center;
-}
-
-.navbar-brand {
-  display: flex;
-  align-items: center;
-}
-.navbar-brand img {
-  margin-right: auto;
-}
-
-.navbar-toggler {
-  margin-left: auto;
-}
-
-/* Button Styling */
-.btn-custom {
-  background-color: #007bff;
-  color: white;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-.btn-custom:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
-#sidebartoggle {
-  position: relative;
-  visibility: hidden;
-  z-index: 1051; /* Höher als die Karte (die einen Z-Index von 1050 haben könnte) */
-  margin: 10% 0 10% 0;
-}
-
-.footer {
-  background-color: #f8f9fa;
-  border-top: 2px solid #dee2e6;
-  padding: 20px;
-  position: fixed;
-  bottom: 0;
+.pf-methodik-toggle {
   width: 100%;
-  text-align: center;
-  font-size: 14px;
-  color: #333;
-}
-.poi-sidebar.show {
-  visibility: visible;
-}
-
-/* Animation on Page Load */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  border: 0;
+  background: transparent;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  text-align: left;
 }
 
-.fade-in {
-  animation: fadeIn 1s ease-in-out;
+.pf-methodik-toggle:hover,
+.pf-methodik-toggle:focus-visible {
+  background: rgba(var(--bs-primary-rgb), 0.05);
+  outline: none;
 }
 
-/* Bootstrap Offcanvas Sidebar */
-.offcanvas {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  background-color: #f8f9fa;
-  width: 200px;
-  z-index: 1050;
-  transition: transform 0.3s ease-in-out;
-}
-.offcanvas.show {
-  transform: translateX(0);
-}
-.offcanvas.hide {
-  transform: translateX(100%);
+.pf-methodik-chevron {
+  transition: transform 0.18s ease;
 }
 
-@media (max-width: 990px) {
-  .navbar-nav {
-    display: flex;
-    text-align: center;
-  }
-  .navbar-brand {
-    display: flex;
-    align-items: center;
-  }
-
-  .header h1 {
-    font-size: 1.5rem;
-    text-align: center;
-    margin-top: 0;
-  }
-  .navbar-collapse {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-  }
-  .nav-item {
-    width: 100%;
-  }
+.pf-methodik-toggle[aria-expanded="true"] .pf-methodik-chevron {
+  transform: rotate(180deg);
 }
 
-/* Responsive Styling */
-@media (max-width: 768px) {
-  .navbar-brand img {
-    max-height: 30px;
-    text-align: center;
-  }
-  .header h1 {
-    font-size: 1.4rem;
-    margin-top: 50px;
-    text-align: center;
-  }
-  #map {
-    height: calc(100vh);
-    width: 100%;
-    position: absolute;
-  }
-  .poi-sidebar {
-    visibility: hidden;
-    margin: 6.2% 0 6.2% 0;
-  }
-  .leaflet-control-zoom {
-    position: absolute;
-    top: 60px;
-  }
-  .section {
-    padding-top: 95px;
-  }
-  .navbar-nav {
-    display: flex;
-    text-align: center;
-  }
-  .navbar-brand {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    flex: 1;
-  }
-  .navbar-collapse {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-  }
-  .nav-item {
-    width: 100%;
-  }
-  .navbar-toggler {
-    margin: 0 auto;
-  }
-  .content-body {
-    margin: 0 19.5% 0 19.5%;
-  }
-  .poi-sidebar.show {
-    visibility: visible;
-  }
-  #sidebartoggle {
-    position: relative;
-    visibility: visible;
-    z-index: 1051; /* Höher als die Karte (die einen Z-Index von 1050 haben könnte) */
-    margin: 10% 0 10% 0;
-  }
-  .list-group-item {
-    font-size: 0.9rem;
-  }
+.pf-methodik-content {
+  border-top: 1px solid var(--bs-border-color);
+  padding: 1rem;
+}
+
+.pf-methodik-content p:last-child {
+  margin-bottom: 0;
+}
+
+.pf-weitere-infos {
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.5rem;
+  background: var(--bs-body-bg);
+  padding: 1rem;
+}
+
+.pf-weitere-infos-content :last-child {
+  margin-bottom: 0;
+}
+
+.pf-weitere-infos-content a {
+  overflow-wrap: anywhere;
 }
