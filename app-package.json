@@ -29,7 +29,7 @@
     "Verkehr"
   ],
   "tags-dateityp": [
-    "csv"
+    "CSV"
   ],
   "tags-datenart": [
     "Geodaten",
@@ -40,7 +40,6 @@
     "assets/Mobile_Screenshot_1.png",
     "assets/Mobile_Screenshot_2.png"
   ],
-  "apiversion": "1",
   "instanz-config": {
     "seitentitel": {
       "label": "Seitentitel",
