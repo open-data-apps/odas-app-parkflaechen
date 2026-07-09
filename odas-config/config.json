@@ -15,19 +15,15 @@
     "- **Datensatz:** <a href=\"https://offenedaten.esslingen.de/Ondics_GmbH\" target=\"_blank\">Parkflächen-Datensatz</a>",
     "- **Ressource:** <a href=\"https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen\" target=\"_blank\">CKAN package_show API</a>",
     "## Über diese App",
-    "Die App wurde entwickelt von Ondics GmbH. App-Version: 1.1.0.",
+    "Die App wurde entwickelt von Ondics GmbH. App-Version: 1.2.1.",
     "## Open Data App Store",
     "Der Open Data App Store betrieben von <a href=\"https://open-data-app-store.de\">ODAS</a>"
   ],
   "kontakt": "Tel.: <a href='tel:+49711310093100'>0711-31009-3100</a><br>Fax: <a href='tel:+49711310093108'>0711-31009-3108</a><br>E-Mail: <a href='mailto:info@ondics.de'>info@ondics.de</a>",
   "impressum": "Ondics GmbH<br>Wolfgang Clauss<br>Blumenstrasse 19<br><a href='https://www.ondics.de/' target='_blank'>https://www.ondics.de/</a>",
   "datenschutz": "",
-  "urlODP": "<a href='https://offenedaten.esslingen.de' target='_blank'>https://offenedaten.esslingen.de</a>",
   "urlDaten": "<a href='https://offenedaten.esslingen.de/Ondics_GmbH' target='_blank'>https://offenedaten.esslingen.de/Ondics_GmbH</a>",
-  "weiterfuehrendeLinks": "<ul><li><a href=\"https://open-data-musterstadt.ckan.de/dataset/parkflachen\" target=\"_blank\">CKAN-Datensatz Parkflächen</a></li><li><a href=\"https://www.example.com/parkraumbewirtschaftung\" target=\"_blank\">Parkraumbewirtschaftung — Stadtverwaltung</a></li></ul>",
   "fusszeile": "(C) Copyright 2025 | Inhalt: Stadt Esslingen | App: Mueller GmbH | Provided by: Ondics GmbH",
   "apiurl": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
-  "sprache": "de",
-  "datenStand": "",
-  "datenquelleHinweis": "Die Parkflächendaten werden über die CKAN API geladen. Zunächst werden die verfügbaren CSV-Ressourcen über package_show ermittelt, dann die eigentlichen Datensätze über datastore_search abgerufen. Die Daten werden alle 30 Sekunden automatisch aktualisiert. Freie Parkplätze werden je nach Datenquelle über Sensoren oder manuelle Zählung ermittelt."
+  "sprache": "de"
 }
