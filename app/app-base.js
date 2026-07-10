@@ -78,8 +78,6 @@ function getConfigUrl() {
 
   if (["127.0.0.1", "localhost"].includes(url.hostname)) {
     configUrl = "../odas-config/config.json";
-  } else if (["10.0.0.142"].includes(url.hostname)) {
-    configUrl = "/odas-config/config.json";
   }
   return configUrl;
 }
