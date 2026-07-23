@@ -1,5 +1,6 @@
 {
   "apiVersion": "1",
+  "proxyAktiv": "nein",
   "titel": "Parkflächen",
   "seitentitel": "ODAS App Parkflächen",
   "icon": "logo_ondics.png",

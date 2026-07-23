@@ -8,7 +8,10 @@ mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 
 DC_BIN = docker compose
-DC_FILES = -f docker-compose.yml #-f docker-compose-prod.yml
+DC_FILES = -f docker-compose.yml
+ifeq ($(STANDALONE),true)
+DC_FILES := ${DC_FILES} -f docker-compose.standalone.yml
+endif
 
 DC_PROJECT = ${current_dir}
 DC = ${DC_BIN} ${DC_FILES}
@@ -32,10 +35,10 @@ help:
 .DEFAULT_GOAL := help
 
 # allgemeine Befehle
-up: ## Alle kontainer starten
-	${DC} up -d --remove-orphans
+up: ## App starten (Standalone mit STANDALONE=true)
+	${DC} up -d --build --remove-orphans
 
-down: ##Alle Container stoppen
+down: ## App stoppen (Standalone mit STANDALONE=true)
 	${DC} down
 
 down-volumes: ## Container stopen, Volumes löschen
@@ -48,10 +51,7 @@ build:  ## Build all containers
 	${DC} build
 
 bash: ## Bash in frontend-container
-	${DC} exec web sh
-
-restart-backend: ## Restart backend-container
-	${DC} restart backend
+	${DC} exec oda-app sh
 
 ps: ## what's up?
 	${DC} ps
