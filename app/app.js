@@ -8,6 +8,34 @@
 let map;
 let markerClusterGroup;
 
+/*
+ * Template-Hook (oda-generic 1.4.0). Die Base ruft ihn vor dem Rendern der neuen Seite
+ * auf. Diese App haelt eine Leaflet-Karte samt Cluster-Layer und eine eigene Sidebar
+ * ausserhalb von #main-content; beides muss beim Verlassen der Startseite abgeraeumt bzw.
+ * ausgeblendet werden. Frueher stand diese Logik in app/app-base.js und hat die Datei vom
+ * Template abweichen lassen.
+ */
+function onPageLeave(page) {
+  if (page !== "startseite" && map) {
+    try {
+      map.remove();
+    } catch (e) {
+      console.warn("Fehler beim Entfernen der Leaflet-Karte:", e);
+    }
+    map = null;
+    markerClusterGroup = null;
+  }
+
+  const poiSidebar = document.getElementById("poiSidebar");
+  const sidebartoggle = document.getElementById("sidebartoggle");
+  if (page === "startseite") {
+    if (sidebartoggle) sidebartoggle.style.visibility = "";
+  } else {
+    if (sidebartoggle) sidebartoggle.style.visibility = "hidden";
+    if (poiSidebar) poiSidebar.style.display = "none";
+  }
+}
+
 function escapeHtml(str) {
   if (str === null || str === undefined) return "";
   return String(str)
@@ -29,13 +57,6 @@ function app(configdata, enclosingHtmlDivElement) {
   `;
   initializeMap();
   poiSidebar.style.display = "block";
-}
-
-function startAutoRefresh() {
-  setInterval(async () => {
-    console.log("Daten werden aktualisiert...");
-    await updateMap(false); // Aktualisiere die Karte im Hintergrund ohne Bounds-Reset
-  }, 30000); // Aktualisierung alle 30 Sekunden
 }
 
 /**
