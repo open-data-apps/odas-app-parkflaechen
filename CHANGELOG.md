@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.0 - 2026-07-31
+- CHG: fehlendes Pflicht-Asset assets/branding.css ergaenzt und brandingCSSFile lokal aktiviert
+
 ## 1.6.0 - 2026-07-31
 - CHG: toter Konfigurationsschlüssel lizenz entfernt (F-17)
 - CHG: brandingCSS und brandingCSSFile als Base-Abhängigkeiten deklariert und lokal gespiegelt (F-17)

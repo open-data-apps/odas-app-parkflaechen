@@ -28,5 +28,5 @@
   "apiurl": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
   "sprache": "de",
   "brandingCSS": "",
-  "brandingCSSFile": ""
+  "brandingCSSFile": "../assets/branding.css"
 }
