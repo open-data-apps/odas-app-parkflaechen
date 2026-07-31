@@ -59,6 +59,10 @@ ps: ## what's up?
 config: ## show docker-compose config 
 	${DC} config
 
-zip: ## Pack den Ordner odas-app-parkflaechen in eine ZIP-Datei
-	zip -r odas-app-parkflaechen.zip \
+zip: ## App zur Auslieferung vorbereiten
+	zip -r ${current_dir}.zip \
 	 	app assets app-package.json CHANGELOG.md 
+
+check-app: ## App prüfen mit Skript aus ODAS-Tools
+	echo "App prüfen"
+	./../odas-tools/app-check.sh

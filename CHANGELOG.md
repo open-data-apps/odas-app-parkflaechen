@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.0 - 2026-07-31
+- FIX: ZIP-Name aus dem Verzeichnis abgeleitet statt hart verdrahtet (F-22)
+- ENH: Fehlendes `check-app`-Target im Makefile ergaenzt (F-22)
+- FIX: Markdown-Reste in `beschreibung` und `impressum` durch HTML ersetzt (F-23),
+  einschliesslich der lokalen Konfiguration
+
 ## 1.7.0 - 2026-07-31
 - CHG: fehlendes Pflicht-Asset assets/branding.css ergaenzt und brandingCSSFile lokal aktiviert
 
