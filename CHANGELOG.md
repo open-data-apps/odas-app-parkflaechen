@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6.0 - 2026-07-31
+- CHG: toter Konfigurationsschlüssel lizenz entfernt (F-17)
+- CHG: brandingCSS und brandingCSSFile als Base-Abhängigkeiten deklariert und lokal gespiegelt (F-17)
+- CHG: dropdown-Default auf Feldebene verschoben statt in format (F-18)
+- CHG: Platzhalter-Entwickler mueller-gmbh durch ondics-gmbh ersetzt (F-21)
+- CHG: Platzhalter Mueller GmbH aus der Fußzeile entfernt (F-21)
+- CHG: daten.schema auf assets/schema.json gesetzt (F-20)
+
 ## 1.5.0 - 2026-07-30
 
 - **FIX:** Der Marker `_multiline_` erscheint nicht mehr im Text von Beschreibung, Kontakt, Datenschutz und Impressum. Mehrzeilige Konfigurationswerte werden jetzt mit erhaltenen Zeilenumbruechen dargestellt
