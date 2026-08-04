@@ -61,6 +61,18 @@ leitet auf den internen Nginx-Port 80 weiter. Die Konfiguration wird aus derselb
 `odas-config/config.json` gelesen wie in der Entwicklung und von Nginx unter `/config`
 ausgeliefert.
 
+### Beim Aufruf kontaktierte Drittanbieter
+
+Beim Aufruf dieser App werden folgende externe Server kontaktiert:
+
+- `cdn.jsdelivr.net` — Bootstrap (Layout- und UI-Framework)
+- `unpkg.com` — Leaflet (Kartendarstellung)
+- `cdnjs.cloudflare.com` — Leaflet MarkerCluster (Gruppierung von Kartenmarkern)
+- `tile.openstreetmap.org` — Kartenkacheln (OpenStreetMap)
+- `google.com/maps` — externer Routen-/Kartenlink (nur bei Klick)
+
+Diese Anbieter bleiben auch im Standalone-Betrieb extern; ein vollständig autarker Betrieb ohne Internetzugang ist derzeit nicht möglich (siehe F-07 in `Review.md`).
+
 ### Auslieferung an den ODAS
 
 `make zip` erzeugt das Liefer-ZIP mit `app/`, `assets/`, `app-package.json` und
