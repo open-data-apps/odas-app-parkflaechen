@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.11.0 - 2026-08-04
+- FIX: Bootstrap, Leaflet vendored in `app/vendor/` statt von CDN geladen (F-07 Teil 2) — Standalone-Betrieb laedt diese Bibliotheken nicht mehr extern
+
 ## 1.10.0 - 2026-08-04
 - FIX: Leaflet von 1.7.1 auf 1.9.4 gehoben — vereinheitlicht mit dem Rest des Portfolios, Voraussetzung für das geplante Vendoring (F-07 Teil 2)
 
