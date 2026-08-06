@@ -69,7 +69,7 @@ Beim Aufruf dieser App werden folgende externe Server kontaktiert:
 - `tile.openstreetmap.org` — Kartenkacheln (OpenStreetMap)
 - `google.com/maps` — externer Routen-/Kartenlink (öffnet erst bei Klick in einem neuen Tab)
 
-Diese Anbieter bleiben auch im Standalone-Betrieb extern; ein vollständig autarker Betrieb ohne Internetzugang ist derzeit nicht möglich. Bootstrap, Leaflet und Chart.js werden seit Version 1.12.0 lokal aus `app/vendor/` ausgeliefert und nicht mehr extern geladen.
+Diese Anbieter bleiben auch im Standalone-Betrieb extern; ein vollständig autarker Betrieb ohne Internetzugang ist derzeit nicht möglich. Bootstrap, Leaflet und Chart.js werden seit Version 1.11.0 lokal aus `app/vendor/` ausgeliefert und nicht mehr extern geladen.
 
 ### Auslieferung an den ODAS
 
