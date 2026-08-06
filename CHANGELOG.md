@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.16.0 - 2026-08-06
+- FIX: Drittanbieterliste "Beim Aufruf kontaktierte Drittanbieter" an das Vendoring angepasst — jetzt lokal ausgelieferte Bibliotheken (Leaflet MarkerCluster) sind aus der Liste entfernt, weiterhin extern geladene Dienste (Kartenkacheln, Google-Maps-Link) bleiben genannt
+
 ## 1.15.0 - 2026-08-06
 - FIX: Leaflet MarkerCluster vendored in `app/vendor/` statt von CDN geladen (Vendoring Teil 3) — Standalone-Betrieb laedt die Zusatzbibliotheken nicht mehr extern
 
