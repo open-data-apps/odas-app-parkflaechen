@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "parkflaechen",
   "name": "Parkflächen",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": [
@@ -139,7 +139,7 @@
       "default": [
         "_multiline_",
         "Alle Daten sind geschützt.",
-        "<h3>Beim Aufruf kontaktierte Drittanbieter</h3><p>Beim Aufruf dieser App werden Bibliotheken bzw. Kartendienste von folgenden externen Servern geladen. Dabei werden IP-Adresse und User-Agent der Besucher:innen an diese Anbieter übertragen:</p><ul><li><strong>tile.openstreetmap.org</strong> — Kartenkacheln (OpenStreetMap)</li><li><strong>google.com/maps</strong> — externer Routen-/Kartenlink (öffnet erst bei Klick in einem neuen Tab)</li></ul>"
+        "<h3>Beim Aufruf kontaktierte Drittanbieter</h3><p>Folgende externe Server werden kontaktiert. Dabei werden IP-Adresse und User-Agent der Besucher:innen an diese Anbieter übertragen:</p><ul><li><strong>tile.openstreetmap.org</strong> — Kartenkacheln (OpenStreetMap)</li><li><strong>google.com/maps</strong> — externer Routen-/Kartenlink (öffnet erst bei Klick in einem neuen Tab)</li></ul>"
       ],
       "erforderlich": "ja"
     },
