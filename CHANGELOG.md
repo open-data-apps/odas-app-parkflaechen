@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.13.0 - 2026-08-06
+- FIX: Base auf Template oda-generic 1.6.0 vereinheitlicht (Hook renderPageOverride)
+
 ## 1.12.0 - 2026-08-04
 - FIX: Datenschutzhinweis "Beim Aufruf kontaktierte Drittanbieter" an das Vendoring angepasst — jetzt lokal ausgelieferte Bibliotheken (Bootstrap/Leaflet/Chart.js) sind aus der Liste entfernt, weiterhin extern geladene Dienste (Kartenkacheln, Zusatzbibliotheken) bleiben genannt
 

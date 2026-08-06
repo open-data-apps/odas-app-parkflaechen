@@ -169,25 +169,38 @@ async function loadPage(page) {
     onPageLeave(page);
   }
 
+  /*
+   * Optionaler App-Hook. Erlaubt der App, den Inhalt einer der Standardseiten
+   * (siehe VALID_PAGES) durch eigenes Markup zu ersetzen, ohne loadPage() selbst
+   * zu ueberschreiben. In app/app.js als `function renderPageOverride(page) {...}`
+   * definierbar; liefert die Funktion undefined/null zurueck (oder fehlt sie),
+   * greift der Standard-Content aus dem switch-Block unten.
+   */
   let content;
-  switch (page) {
-    case "startseite":
-      content = await app(configData, document.getElementById("main-content"));
-      break;
-    case "kontakt":
-      content = createPageContent("Kontakt", configData.kontakt);
-      break;
-    case "impressum":
-      content = createPageContent("Impressum", configData.impressum);
-      break;
-    case "datenschutz":
-      content = createPageContent("Datenschutz", configData.datenschutz);
-      break;
-    case "beschreibung":
-      content = createPageContent("Über diese App", configData.beschreibung);
-      break;
-    default:
-      content = createPageContent("Fehler", "Seite nicht gefunden.");
+  if (typeof renderPageOverride === "function") {
+    content = renderPageOverride(page);
+  }
+
+  if (content === undefined || content === null) {
+    switch (page) {
+      case "startseite":
+        content = await app(configData, document.getElementById("main-content"));
+        break;
+      case "kontakt":
+        content = createPageContent("Kontakt", configData.kontakt);
+        break;
+      case "impressum":
+        content = createPageContent("Impressum", configData.impressum);
+        break;
+      case "datenschutz":
+        content = createPageContent("Datenschutz", configData.datenschutz);
+        break;
+      case "beschreibung":
+        content = createPageContent("Über diese App", configData.beschreibung);
+        break;
+      default:
+        content = createPageContent("Fehler", "Seite nicht gefunden.");
+    }
   }
   if (content) {
     document.getElementById("main-content").innerHTML = content;
