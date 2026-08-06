@@ -74,7 +74,7 @@ Diese Anbieter bleiben auch im Standalone-Betrieb extern; ein vollständig autar
 
 `make zip` erzeugt das Liefer-ZIP mit `app/`, `assets/`, `app-package.json` und
 `CHANGELOG.md`. Die Infrastrukturdateien (`Dockerfile`, `docker-compose*.yml`,
-`nginx.conf`, `Makefile`) sind nicht Teil der Auslieferung.
+`nginx.conf`, `Makefile`) sind nicht Teil der Auslieferung. Das ZIP ist ein Bauartefakt und wird nicht mitversioniert, sondern bei Bedarf mit `make zip` erzeugt.
 
 ## Autor
 
