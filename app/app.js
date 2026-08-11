@@ -46,6 +46,11 @@ function escapeHtml(str) {
     .replace(/'/g, "&#39;");
 }
 
+function safeHttpUrl(value) {
+  const s = String(value || "").trim();
+  return /^https?:\/\//i.test(s) ? s : "";
+}
+
 function app(configdata, enclosingHtmlDivElement) {
   const poiSidebar = document.getElementById("poiSidebar");
   enclosingHtmlDivElement.innerHTML = `
@@ -154,13 +159,13 @@ function renderPOIsOnMapAndSidebar(poiGroups, targetClusterGroup, poiList) {
 
     poiGroups[resourceName].forEach((poi) => {
       const freeSpaces = parseInt(poi.freeSpaces, 10) || 0;
-      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${poi.latitude},${poi.longitude}`;
+      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(String(poi.latitude))},${encodeURIComponent(String(poi.longitude))}`;
       const popupContent = `
-        <strong>${poi.name}</strong><br>
-        ${poi.description}<br>
-        <strong>Maximale Parkplätze: ${poi.maxSpaces}</strong><br>
-        <strong>Freie Parkplätze: ${freeSpaces}</strong><br>
-        <a href="${googleMapsUrl}" target="_blank">In Google Maps ansehen</a>
+        <strong>${escapeHtml(poi.name)}</strong><br>
+        ${escapeHtml(poi.description)}<br>
+        <strong>Maximale Parkplätze: ${escapeHtml(poi.maxSpaces)}</strong><br>
+        <strong>Freie Parkplätze: ${escapeHtml(freeSpaces)}</strong><br>
+        <a href="${escapeHtml(googleMapsUrl)}" target="_blank">In Google Maps ansehen</a>
       `;
 
       const marker = L.marker([poi.latitude, poi.longitude], {

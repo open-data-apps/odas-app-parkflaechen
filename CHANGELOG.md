@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.19.0 - 2026-08-11
+- FIX: XSS- und URL-Vertrag geschlossen (F-35)
+
 ## 1.18.0 - 2026-08-06
 - FIX: Datenschutzangabe beschreibt den tatsaechlichen Stand nach dem Vendoring (Welle G)
 
