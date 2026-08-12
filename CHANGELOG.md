@@ -1,5 +1,9 @@
 # Changelog
 
+
+## 1.20.0 - 2026-08-12
+- FIX: Ungenutztes `app/app-base.css` aus der Auslieferung entfernt (F-54c): Die Datei wurde nie eingebunden — diese App trägt ihr Layout vollständig in `app/app.css`. Ein Einbinden schied aus, weil die Base-Regeln für `body` (display, flex-direction, height) nicht überschrieben werden und das Legacy-Layout verändert hätten.
+
 ## 1.19.0 - 2026-08-11
 - FIX: XSS- und URL-Vertrag geschlossen (F-35)
 
