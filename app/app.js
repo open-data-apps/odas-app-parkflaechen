@@ -52,6 +52,13 @@ function safeHttpUrl(value) {
 }
 
 function app(configdata, enclosingHtmlDivElement) {
+  const quelle = String(configdata.apiurl || "").trim();
+  if (!quelle || /^\{\{.*\}\}$/.test(quelle) || /^<.*>$/.test(quelle)) {
+    enclosingHtmlDivElement.innerHTML =
+      '<div class="alert alert-info m-4" role="alert">Es ist keine Datenquelle konfiguriert.</div>';
+    return;
+  }
+
   const poiSidebar = document.getElementById("poiSidebar");
   enclosingHtmlDivElement.innerHTML = `
     <header class="header">
