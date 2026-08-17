@@ -11,7 +11,7 @@
     "<h2>App-Anbieter</h2>",
     "<p>Die App wird bereit gestellt von <a href=\"https://www.ondics.de\">Ondics GmbH</a></p>",
     "<h2>Datenquelle</h2>",
-    "<ul><li><strong>Open Data Portal:</strong> <a href=\"https://offenedaten.esslingen.de\" target=\"_blank\">offenedaten.esslingen.de</a></li><li><strong>Datensatz:</strong> <a href=\"https://offenedaten.esslingen.de/Ondics_GmbH\" target=\"_blank\">Parkflächen-Datensatz</a></li><li><strong>Ressource:</strong> <a href=\"https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen\" target=\"_blank\">CKAN package_show API</a></li></ul>",
+    "<ul><li><strong>Open Data Portal:</strong> <a href=\"https://open-data-musterstadt.ckan.de\" target=\"_blank\">open-data-musterstadt.ckan.de</a></li><li><strong>Datensatz:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/parkflachen\" target=\"_blank\">Parkflächen-Datensatz</a></li><li><strong>Ressource:</strong> <a href=\"https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen\" target=\"_blank\">CKAN package_show API</a></li></ul>",
     "<h2>Über diese App</h2>",
     "<p>Die App wurde entwickelt von Ondics GmbH. App-Version: 1.2.1.</p>",
     "<h2>Open Data App Store</h2>",
@@ -25,7 +25,7 @@
     "<p>Die angezeigten Daten werden vom Browser direkt aus der konfigurierten Datenquelle geladen. Dabei werden technisch bedingt IP-Adresse und Browserkennung an deren Betreiber übermittelt. Maßgeblich ist der Schalter <code>proxyAktiv</code> der Instanz-Konfiguration.</p>",
     "<h3>Beim Aufruf kontaktierte Drittanbieter</h3><p>Folgende externe Server werden kontaktiert. Dabei werden IP-Adresse und User-Agent der Besucher:innen an diese Anbieter übertragen:</p><ul><li><strong>tile.openstreetmap.org</strong> — Kartenkacheln (OpenStreetMap)</li><li><strong>google.com/maps</strong> — externer Routen-/Kartenlink (öffnet erst bei Klick in einem neuen Tab)</li></ul>"
   ],
-  "urlDaten": "https://offenedaten.esslingen.de/Ondics_GmbH",
+  "urlDaten": "https://open-data-musterstadt.ckan.de/dataset/parkflachen",
   "fusszeile": "(C) Copyright 2025 | Inhalt: Stadt Esslingen | App: Ondics GmbH | Provided by: Ondics GmbH",
   "apiurl": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
   "sprache": "de",

@@ -151,7 +151,25 @@ async function fetchOdasResource(targetUrl, configdata = {}) {
 }
 
 async function fetchOdasJson(targetUrl, configdata = {}) {
-  return JSON.parse(await fetchOdasResource(targetUrl, configdata));
+  const rawContent = await fetchOdasResource(targetUrl, configdata);
+  try {
+    return JSON.parse(rawContent);
+  } catch (_error) {
+    throw new Error(
+      `Die konfigurierte Daten-URL liefert kein JSON, sondern ${describeNonJsonPayload(rawContent)}. ` +
+        "Bitte in der Instanzkonfiguration den API-Endpunkt der Datenquelle eintragen, " +
+        "nicht den Datensatz- oder Download-Link.",
+    );
+  }
+}
+
+function describeNonJsonPayload(rawContent) {
+  const text = String(rawContent == null ? "" : rawContent).trim();
+  if (!text) return "eine leere Antwort";
+  if (text.startsWith("<")) return "eine HTML-Seite";
+  const firstLine = text.split(/\r?\n/, 1)[0];
+  if (/[,;]/.test(firstLine)) return "eine CSV- oder Textdatei";
+  return "unlesbaren Inhalt";
 }
 
 /**
