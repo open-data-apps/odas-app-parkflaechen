@@ -1,6 +1,9 @@
 # Changelog
 
 
+## 1.21.0 - 2026-08-17
+- **CHG:** `instanz-config`-`category`-Vokabular auf Deutsch umgestellt (`allgemein`, `beschreibung`, `datenherkunft`, `kontakt-rechtliches`, `sonstiges`); die entfallenen Kategorien `metrics` und `advanced` wurden auf `beschreibung` bzw. `sonstiges` verteilt
+
 ## 1.20.0 - 2026-08-12
 - FIX: Ungenutztes `app/app-base.css` aus der Auslieferung entfernt (F-54c): Die Datei wurde nie eingebunden — diese App trägt ihr Layout vollständig in `app/app.css`. Ein Einbinden schied aus, weil die Base-Regeln für `body` (display, flex-direction, height) nicht überschrieben werden und das Legacy-Layout verändert hätten.
 
