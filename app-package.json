@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "parkflaechen",
   "name": "Parkflächen",
-  "version": "1.22.0",
+  "version": "1.23.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": [
@@ -180,7 +180,7 @@
     "apiurl": {
       "label": "URL zu den Daten",
       "category": "datenherkunft",
-      "hilfe": "Von dieser URL zum Datensatz werden die Ressoucen bezogen",
+      "hilfe": "Direkter, maschinenlesbarer Endpunkt, von dem die App die Ressourcen lädt — nicht die Datensatzseite im ODP (siehe „URL zum Datensatz im ODP\").",
       "format": {
         "typ": "url",
         "laenge": 255
