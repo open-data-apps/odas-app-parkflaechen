@@ -5,7 +5,7 @@
   "icon": "logo_ondics.png",
   "beschreibung": [
     "<p>Die Parkflächen-App zeigt die aktuelle Auslastung öffentlicher Parkflächen auf einer interaktiven Karte.</p>",
-    "<p>Die Daten werden über die CKAN-API aus dem Open Data Portal geladen und alle 30 Sekunden aktualisiert.</p>",
+    "<p>Die Daten werden über die CKAN-API aus dem Open Data Portal geladen. Die Aktualisierung erfolgt beim Laden der Seite.</p>",
     "<h2>Für wen ist diese App?</h2>",
     "<p>Diese App zeigt die aktuelle Auslastung öffentlicher Parkflächen. Sie richtet sich an Autofahrer:innen, die schnell einen freien Parkplatz finden möchten.</p>",
     "<h2>App-Anbieter</h2>",

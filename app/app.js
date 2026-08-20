@@ -9,6 +9,16 @@ let map;
 let markerClusterGroup;
 
 /*
+ * Generation-Zaehler gegen veraltete Async-Fortsetzungen (F-70). map/markerClusterGroup
+ * sind modulweite Singletons (keine Instanz pro Container); initializeMap() erhoeht den
+ * Zaehler synchron bei jedem (Re-)Aufbau der Karte und reicht den aktuellen Wert an
+ * updateMap() durch. Kehrt updateMap() nach einem await zurueck und der modulweite Zaehler
+ * hat sich inzwischen veraendert (neue Instanz oder Seite verlassen), wird die Fortsetzung
+ * abgebrochen, bevor sie DOM/Karte-Zustand einer bereits ueberholten Instanz beschreibt.
+ */
+let mapGeneration = 0;
+
+/*
  * Template-Hook (oda-generic 1.4.0). Die Base ruft ihn vor dem Rendern der neuen Seite
  * auf. Diese App haelt eine Leaflet-Karte samt Cluster-Layer und eine eigene Sidebar
  * ausserhalb von #main-content; beides muss beim Verlassen der Startseite abgeraeumt bzw.
@@ -16,6 +26,11 @@ let markerClusterGroup;
  * Template abweichen lassen.
  */
 function onPageLeave(page) {
+  if (page !== "startseite") {
+    // Markiert alle noch laufenden updateMap()-Fortsetzungen als veraltet, auch wenn
+    // deren Fetch noch vor dem eigentlichen map.remove() unten in Flight ist.
+    mapGeneration++;
+  }
   if (page !== "startseite" && map) {
     try {
       map.remove();
@@ -230,10 +245,10 @@ async function fetchResourceRecords(resourceId) {
   return data.result.records;
 }
 
-async function updateMap(fitBounds = false) {
+async function updateMap(fitBounds = false, generation = mapGeneration) {
   try {
-    if (!map) {
-      console.log("Karte nicht aktiv. Aktualisierung übersprungen.");
+    if (!map || generation !== mapGeneration) {
+      console.log("Karte nicht aktiv oder veraltet. Aktualisierung übersprungen.");
       return;
     }
 
@@ -245,6 +260,9 @@ async function updateMap(fitBounds = false) {
 
     // Ressourcen-IDs und Namen abrufen (über Proxy)
     const { resources, metadataModified } = await getAllResourceNamesAndIdsFromDataset(dataset);
+    // Waehrend des Fetch kann eine neuere Instanz gestartet worden oder die Seite
+    // verlassen worden sein (F-70): dann nichts mehr in DOM/Karte schreiben.
+    if (generation !== mapGeneration) return;
     if (resources.length === 0) {
       throw new Error("Keine Ressourcen im Dataset gefunden");
     }
@@ -279,6 +297,9 @@ async function updateMap(fitBounds = false) {
       const { id: resourceId, name: resourceName } = resource;
       try {
         const records = await fetchResourceRecords(resourceId);
+        // Erneuter Check nach dem await: eine zwischenzeitlich gestartete neuere
+        // Instanz gewinnt, diese Fortsetzung bricht ab (F-70).
+        if (generation !== mapGeneration) return;
         if (records.length === 0) {
           console.warn(`Keine POIs gefunden für Ressource ID: ${resourceId}`);
           continue;
@@ -325,10 +346,26 @@ async function updateMap(fitBounds = false) {
     }
   } catch (error) {
     console.error("Fehler beim Laden der Daten:", error);
+    // Fehler nur anzeigen, wenn diese Fortsetzung noch zur aktuellen Instanz gehoert;
+    // sonst wuerde eine veraltete Fehlermeldung den Erfolgszustand einer neueren,
+    // inzwischen erfolgreich geladenen Instanz ueberschreiben (F-70/F-75).
+    if (generation === mapGeneration) {
+      const poiList = document.getElementById("poiList");
+      if (poiList) {
+        poiList.innerHTML = `<li class="list-group-item"><div class="alert alert-danger mb-0" role="alert"><strong>Fehler beim Laden der Daten:</strong> ${escapeHtml(
+          error.message,
+        )}</div></li>`;
+      }
+    }
   }
 }
 
 async function initializeMap() {
+  // Neue Generation fuer diesen (Re-)Aufbau der Karte (F-70); wird synchron vor jeder
+  // Async-Arbeit erhoeht, damit noch laufende Fortsetzungen der vorherigen Instanz sich
+  // beim naechsten Check als veraltet erkennen.
+  const myGeneration = ++mapGeneration;
+
   if (typeof map !== 'undefined' && map) {
     try {
       map.remove();
@@ -337,7 +374,7 @@ async function initializeMap() {
     }
     map = null;
   }
-  
+
   map = L.map("map").setView([51.1657, 10.4515], 4);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
@@ -346,7 +383,7 @@ async function initializeMap() {
   setupEventListeners();
 
   // Initiales Laden der Karte mit Bounds-Zentrierung
-  await updateMap(true);
+  await updateMap(true, myGeneration);
 }
 
 function setupEventListeners() {
@@ -394,8 +431,11 @@ async function getAllResourceNamesAndIdsFromDataset(datasetId) {
       name: resource.name || "Unbekannte Ressource",
     })), metadataModified: data.result.metadata_modified || null };
   } catch (error) {
+    // Fehler NICHT verschlucken (F-75): ein kaputter/nicht erreichbarer API-Endpunkt
+    // muss updateMap()s Fehlerbehandlung erreichen, statt hier still als "0 Ressourcen
+    // gefunden" behandelt zu werden.
     console.error("Fehler beim Abrufen der Ressource-Informationen:", error);
-    return { resources: [], metadataModified: null };
+    throw error;
   }
 }
 

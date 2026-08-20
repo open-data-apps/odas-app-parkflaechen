@@ -1,6 +1,10 @@
 # Changelog
 
 
+## 1.24.0 - 2026-08-20
+- FIX: Irreführende "alle 30 Sekunden aktualisiert"-Beschreibung in `app-package.json` und `odas-config/config.json` korrigiert; Ladefehler (inkl. kaputter API-Endpunkt in `getAllResourceNamesAndIdsFromDataset()`, der zuvor still verschluckt wurde) werden jetzt sichtbar in der Sidebar angezeigt statt nur geloggt (F-75)
+- FIX: Race-/Dispose-Guard ergänzt: ein Generation-Zähler in `updateMap()`/`initializeMap()`/`onPageLeave()` verhindert, dass eine veraltete Async-Fortsetzung nach schnellem Seitenwechsel oder erneutem Laden noch Karte/DOM einer bereits überholten Instanz beschreibt (F-70)
+
 ## 1.23.0 - 2026-08-17
 - `apiurl.hilfe` verwendete das Wort „Datensatz" für das Feld, das explizit NICHT die Datensatzseite sein soll (plus Tippfehler „Ressoucen"); jetzt mit expliziter Abgrenzung zu `urlDaten` formuliert (F-68)
 
