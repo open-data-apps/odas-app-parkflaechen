@@ -1,6 +1,9 @@
 # Changelog
 
 
+## 1.25.0 - 2026-08-20
+- Markdown-Metadaten: Paketbeschreibungen auf echtes Markdown umgestellt, exakte Identität Top-Level/Instanz hergestellt, lokale HTML-Fixture semantisch gespiegelt.
+
 ## 1.24.0 - 2026-08-20
 - FIX: Irreführende "alle 30 Sekunden aktualisiert"-Beschreibung in `app-package.json` und `odas-config/config.json` korrigiert; Ladefehler (inkl. kaputter API-Endpunkt in `getAllResourceNamesAndIdsFromDataset()`, der zuvor still verschluckt wurde) werden jetzt sichtbar in der Sidebar angezeigt statt nur geloggt (F-75)
 - FIX: Race-/Dispose-Guard ergänzt: ein Generation-Zähler in `updateMap()`/`initializeMap()`/`onPageLeave()` verhindert, dass eine veraltete Async-Fortsetzung nach schnellem Seitenwechsel oder erneutem Laden noch Karte/DOM einer bereits überholten Instanz beschreibt (F-70)
