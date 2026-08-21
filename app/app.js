@@ -67,7 +67,7 @@ function safeHttpUrl(value) {
 }
 
 function app(configdata, enclosingHtmlDivElement) {
-  const quelle = String(configdata.apiurl || "").trim();
+  const quelle = getOdasApiUrl(configdata, "parkflaechen");
   if (!quelle || /^\{\{.*\}\}$/.test(quelle) || /^<.*>$/.test(quelle)) {
     enclosingHtmlDivElement.innerHTML =
       '<div class="alert alert-info m-4" role="alert">Es ist keine Datenquelle konfiguriert.</div>';
@@ -165,6 +165,17 @@ async function fetchOdasResource(targetUrl, configdata = {}) {
   }
 }
 
+/**
+ * Löst eine benannte Datenressource aus configdata.apiurls auf.
+ * Neue apiurls-Form (typ: "array"); das frühere skalare apiurl wird nicht mehr gelesen.
+ * @returns {string} getrimmte URL, oder "" für den Zustand "keine Quelle konfiguriert"
+ */
+function getOdasApiUrl(configdata, name) {
+  const liste = Array.isArray(configdata && configdata.apiurls) ? configdata.apiurls : [];
+  const treffer = liste.find((eintrag) => eintrag && eintrag.name === name);
+  return String((treffer && treffer.url) || "").trim();
+}
+
 async function fetchOdasJson(targetUrl, configdata = {}) {
   const rawContent = await fetchOdasResource(targetUrl, configdata);
   try {
@@ -233,7 +244,7 @@ function renderPOIsOnMapAndSidebar(poiGroups, targetClusterGroup, poiList) {
  * Holt die Daten für eine einzelne Ressource vom Proxy-Server.
  */
 async function fetchResourceRecords(resourceId) {
-  const datastoreApiUrl = new URL(configData.apiurl).origin + "/api/3/action/datastore_search";
+  const datastoreApiUrl = new URL(getOdasApiUrl(configData, "parkflaechen")).origin + "/api/3/action/datastore_search";
   const query = `?resource_id=${resourceId}`;
   // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
   const data = await fetchOdasJson(datastoreApiUrl + query, configData);
@@ -253,9 +264,9 @@ async function updateMap(fitBounds = false, generation = mapGeneration) {
     }
 
     // Dataset-Wert aus der API-URL extrahieren
-    const dataset = new URL(configData.apiurl).searchParams.get("id");
+    const dataset = new URL(getOdasApiUrl(configData, "parkflaechen")).searchParams.get("id");
     if (!dataset) {
-      throw new Error("Keine Dataset-ID in der apiurl gefunden.");
+      throw new Error("Keine Dataset-ID in der apiurls.parkflaechen gefunden.");
     }
 
     // Ressourcen-IDs und Namen abrufen (über Proxy)
@@ -413,7 +424,7 @@ function setupEventListeners() {
 
 async function getAllResourceNamesAndIdsFromDataset(datasetId) {
   try {
-    const apiUrl = `${new URL(configData.apiurl).origin}/api/3/action/package_show?id=${datasetId}`;
+    const apiUrl = `${new URL(getOdasApiUrl(configData, "parkflaechen")).origin}/api/3/action/package_show?id=${datasetId}`;
     // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
     const data = await fetchOdasJson(apiUrl, configData);
 

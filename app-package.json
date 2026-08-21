@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "parkflaechen",
   "name": "Parkflächen",
-  "version": "1.25.0",
+  "version": "1.26.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": [
@@ -18,7 +18,7 @@
     "",
     "## Methodik",
     "",
-    "Die App ermittelt die Datensatz-ID aus dem konfigurierten `apiurl` (`/api/3/action/package_show?id=...`) und ruft `package_show` auf der API-Origin dieser URL auf – direkt im Browser oder über den ODAS-Proxy (`/odp-data?path=...`) je nach `proxyAktiv`. Aus der Antwort liest sie `result.resources` mit `id` und `name`.",
+    "Die App ermittelt die Datensatz-ID aus dem konfigurierten `apiurls.parkflaechen` (`/api/3/action/package_show?id=...`) und ruft `package_show` auf der API-Origin dieser URL auf – direkt im Browser oder über den ODAS-Proxy (`/odp-data?path=...`) je nach `proxyAktiv`. Aus der Antwort liest sie `result.resources` mit `id` und `name`.",
     "",
     "Für jede Ressource wird `datastore_search` auf derselben Origin aufgerufen (`/api/3/action/datastore_search?resource_id=...`) und das JSON-Feld `result.records` ausgewertet. Alle Records werden zusammengeführt; Einträge mit identischem `name` werden exakt dedupliziert (nur das erste Vorkommen bleibt). Die verbleibenden Flächen werden in der Seitenleiste nach Ressourcename gruppiert.",
     "",
@@ -130,7 +130,7 @@
         "",
         "## Methodik",
         "",
-        "Die App ermittelt die Datensatz-ID aus dem konfigurierten `apiurl` (`/api/3/action/package_show?id=...`) und ruft `package_show` auf der API-Origin dieser URL auf – direkt im Browser oder über den ODAS-Proxy (`/odp-data?path=...`) je nach `proxyAktiv`. Aus der Antwort liest sie `result.resources` mit `id` und `name`.",
+        "Die App ermittelt die Datensatz-ID aus dem konfigurierten `apiurls.parkflaechen` (`/api/3/action/package_show?id=...`) und ruft `package_show` auf der API-Origin dieser URL auf – direkt im Browser oder über den ODAS-Proxy (`/odp-data?path=...`) je nach `proxyAktiv`. Aus der Antwort liest sie `result.resources` mit `id` und `name`.",
         "",
         "Für jede Ressource wird `datastore_search` auf derselben Origin aufgerufen (`/api/3/action/datastore_search?resource_id=...`) und das JSON-Feld `result.records` ausgewertet. Alle Records werden zusammengeführt; Einträge mit identischem `name` werden exakt dedupliziert (nur das erste Vorkommen bleibt). Die verbleibenden Flächen werden in der Seitenleiste nach Ressourcename gruppiert.",
         "",
@@ -240,17 +240,24 @@
       },
       "erforderlich": "ja"
     },
-    "apiurl": {
-      "label": "URL zu den Daten",
+    "apiurls": {
+      "label": "URLs zu Datenressourcen",
       "category": "datenherkunft",
-      "hilfe": "Direkter, maschinenlesbarer Endpunkt, von dem die App die Ressourcen lädt — nicht die Datensatzseite im ODP (siehe „URL zum Datensatz im ODP\").",
+      "hilfe": "Direkter Download-, Datei- oder API-Endpunkt der tatsächlich verwendeten Datenquelle(n). Mehrere Einträge möglich.",
+      "typ": "array",
       "format": {
         "typ": "url",
-        "laenge": 255
+        "laenge": 500
       },
-      "default": "{{appconfig.datensatz-apiurl}}",
-      "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
-      "erforderlich": "ja"
+      "urls": [
+        {
+          "name": "parkflaechen",
+          "label": "URL zu den Daten",
+          "default": "{{appconfig.datensatz-apiurl}}",
+          "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
+          "erforderlich": "ja"
+        }
+      ]
     },
     "sprache": {
       "label": "Sprache der App",
