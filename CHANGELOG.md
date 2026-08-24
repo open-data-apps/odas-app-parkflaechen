@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.28.0 - 2026-08-22
+- **CHG:** `api-version` im Paket vor `instanz-config` verschoben (Template-Reihenfolge, keine Inhaltsänderung).
+
 ## 1.27.0 - 2026-08-22
 - **CHG:** `version` in `app-package.json` zu `app-version` umbenannt.
 - **ENH:** Top-Level-Feld `app-package-version` ergänzt (Wert `"2"`: mehrere benannte API-URLs über `instanz-config.apiurls`).
