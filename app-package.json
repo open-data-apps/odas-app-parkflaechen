@@ -255,7 +255,7 @@
         {
           "name": "parkflaechen",
           "label": "URL zu den Daten",
-          "default": "{{appconfig.datensatz-apiurl}}",
+          "default": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
           "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen",
           "erforderlich": "ja"
         }
@@ -281,7 +281,7 @@
       "format": {
         "typ": "url"
       },
-      "default": "{{appconfig.datensatz-url}}",
+      "default": "https://open-data-musterstadt.ckan.de/dataset/parkflachen",
       "beispiel": "https://open-data-musterstadt.ckan.de/dataset/parkflachen",
       "erforderlich": "ja"
     },
