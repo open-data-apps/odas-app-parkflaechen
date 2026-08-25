@@ -112,7 +112,7 @@
         "",
         "Dann richten Sie sich gerne an uns. Wir freuen uns über alle Nachrichten. Ihre Nachrichten können Sie uns mitteilen über:",
         "",
-        "- Tel.: [{{odp.anbieter.tel}}](tel:{{odp.anbieter.telcode}})",
+        "- Tel.: [{{odp.anbieter.tel}}](tel:{{odp.anbieter.tel}})",
         "- E-Mail: [{{odp.anbieter.email}}](mailto:{{odp.anbieter.email}})"
       ],
       "erforderlich": "ja"
@@ -179,7 +179,7 @@
         "{{{odp.anbieter.strasse}}}  ",
         "{{{odp.anbieter.plzort}}}",
         "",
-        "Website: [{{odp.anbieter.url-extern}}]({{odp.anbieter.url-extern}})",
+        "Website: [{{odp.anbieter.url}}]({{odp.anbieter.url}})",
         "",
         "## Ansprechpartner",
         "",
