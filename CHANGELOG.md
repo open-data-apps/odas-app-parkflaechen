@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.30.0 - 2026-08-25
+- **CHG:** Datensatz-Link in der Beschreibung nutzt den neuen Shortcode `{{{appinstanz.urlDaten}}}` und zeigt damit auf den tatsächlich gebuchten Datensatz statt auf eine feste Beispiel-URL.
+
+
 ## 1.29.0 - 2026-08-25
 - **CHG:** Proxy-Aufruf sendet die vollständige Ziel-URL statt nur Pfad+Query, damit die neue Origin-Allowlist-Prüfung der ODAS-Plattform greift (bisher implizite Auflösung gegen den ersten konfigurierten `apiurl`).
 - **FIX:** Tote `appconfig.*`-Shortcodes entfernt: Paket-Defaults für `apiurls`/`urlDaten` führen echte Beispiel-URLs, Links nutzen `{{{appinstanz.apiurls.1}}}`; lokale config.json bereinigt.
