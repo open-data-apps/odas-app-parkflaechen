@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.29.0 - 2026-08-25
+- **CHG:** Proxy-Aufruf sendet die vollständige Ziel-URL statt nur Pfad+Query, damit die neue Origin-Allowlist-Prüfung der ODAS-Plattform greift (bisher implizite Auflösung gegen den ersten konfigurierten `apiurl`).
+- **FIX:** Tote `appconfig.*`-Shortcodes entfernt: Paket-Defaults für `apiurls`/`urlDaten` führen echte Beispiel-URLs, Links nutzen `{{{appinstanz.apiurls.1}}}`; lokale config.json bereinigt.
+- **FIX:** Tote Anbieter-Shortcodes in Kontakt/Impressum ersetzt (`{{odp.anbieter.url-extern}}` → `{{odp.anbieter.url}}`, `tel:{{odp.anbieter.telcode}}` → `tel:{{odp.anbieter.tel}}`).
+
+
 ## 1.28.0 - 2026-08-22
 - **CHG:** `api-version` im Paket vor `instanz-config` verschoben (Template-Reihenfolge, keine Inhaltsänderung).
 
