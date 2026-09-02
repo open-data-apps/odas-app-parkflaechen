@@ -128,13 +128,26 @@ function getOdasProxyEndpoint(targetUrl, pathname) {
   return `${appPath}/odp-data?path=${encodeURIComponent(targetUrl)}`;
 }
 
-async function fetchViaOdasProxy(targetUrl) {
+async function fetchViaOdasProxy(targetUrl, options = {}) {
+  if (typeof isKeineDatenquelleKonfiguriert === "function" && isKeineDatenquelleKonfiguriert(targetUrl)) {
+    throw new Error("Keine Datenquelle konfiguriert.");
+  } else if (typeof isKeineDatenquelleKonfiguriert !== "function") {
+    const v = String(targetUrl || "").trim();
+    if (!v || /^\{\{.*\}\}$/.test(v) || /^<.*>$/.test(v)) throw new Error("Keine Datenquelle konfiguriert.");
+  }
+
   const response = await fetch(getOdasProxyEndpoint(targetUrl), {
     method: "POST",
+    signal: options && options.signal ? options.signal : undefined,
   });
 
   if (!response.ok) {
-    throw new Error(`ODAS-Proxy-Fehler: HTTP ${response.status}`);
+    let body = "";
+    try {
+      body = await response.text();
+    } catch (_e) {}
+    const originHint = /origin not allowed/i.test(body) ? " – URL origin not allowed" : "";
+    throw new Error(`ODAS-Proxy-Fehler: HTTP ${response.status}${originHint}`);
   }
 
   const proxyData = await response.json();
@@ -195,6 +208,154 @@ function describeNonJsonPayload(rawContent) {
   if (/[,;]/.test(firstLine)) return "eine CSV- oder Textdatei";
   return "unlesbaren Inhalt";
 }
+
+function isKeineDatenquelleKonfiguriert(targetUrl) {
+  const quelle = String(targetUrl || "").trim();
+  return !quelle || /^\{\{.*\}\}$/.test(quelle) || /^<.*>$/.test(quelle);
+}
+
+
+const TYP_BEZEICHNUNG = {
+  "ckan-dkan-ds": "Tabellen-API mit Daten-ID",
+  "ckan-ps": "Datensatz-API",
+  "ckan-dl": "Datei-Download",
+  "ods21": "Open-Data-Suche (API v2.1)",
+  "wfs": "Kartendienst (WFS)",
+  "sparql": "Wissensdatenbank (SPARQL)",
+  "csv-zip": "Statische Datei"
+};
+
+function validateUrlTypErwartung(url, erwarteterTyp) {
+  const u = String(url || "");
+  if (!erwarteterTyp || isKeineDatenquelleKonfiguriert(u)) return null;
+  const checks = {
+    "ckan-dkan-ds": /\/api\/3\/action\/datastore_search\?resource_id=/i,
+    "ckan-ps": /\/api\/3\/action\/package_show\?id=/i,
+    "ckan-dl": /\/dataset\/.*\/resource\/.*\/download\//i,
+    "ods21": /\/api\/explore\/v2\.1\//i,
+    "wfs": /service=WFS/i,
+    "sparql": /\/api\/ts\/v1\/kg\/sparql/i,
+    "csv-zip": /\.(csv|json|zip)(\?|$)/i
+  };
+  const re = checks[erwarteterTyp];
+  if (!re) return null;
+  if (!re.test(u)) {
+    const soll = TYP_BEZEICHNUNG[erwarteterTyp] || erwarteterTyp;
+    return `Typ passt nicht: erwartet „${soll}", erhalten „${u.slice(0, 60)}…". Prüfen Sie den Hilfe-Tooltip bei „URLs zu Datenressourcen".`;
+  }
+  return null;
+}
+
+function classifyOdasFehler(error, kontext = {}) {
+  const msg = String((error && error.message) || error || "");
+  const url = String(kontext.url || "");
+  const label = String(kontext.label || "Datenressource");
+  const typLabel = String(kontext.typLabel || TYP_BEZEICHNUNG[kontext.erwarteterTyp] || "Datenquelle");
+  if (/Keine Datenquelle konfiguriert/i.test(msg) || isKeineDatenquelleKonfiguriert(url)) {
+    return {
+      kind: "KEINE_QUELLE",
+      titel: "Es ist keine Datenquelle konfiguriert.",
+      hinweis: `Prüfen Sie unter „URLs zu Datenressourcen → ${label}" ob eine gültige ${typLabel}-URL eingetragen ist (Hilfe-Tooltip beachten).`,
+      detail: msg,
+      alertClass: "alert-info"
+    };
+  }
+  if (/Typ passt nicht: erwartet/i.test(msg)) {
+    return {
+      kind: "TYP_MISMATCH",
+      titel: msg,
+      hinweis: `Diese App erwartet ${typLabel}. Korrigieren Sie die URL gemäß Hilfe-Tooltip (Beispiel dort).`,
+      detail: msg,
+      alertClass: "alert-danger"
+    };
+  }
+  if (/URL origin not allowed/i.test(msg)) {
+    return {
+      kind: "PROXY_ORIGIN",
+      titel: "ODAS-Proxy blockiert: Ziel-Origin nicht freigegeben.",
+      hinweis: "Tragen Sie die Ziel-Origin als eigenen Eintrag unter „URLs zu Datenressourcen“ ein oder prüfen Sie proxyAktiv.",
+      detail: msg,
+      alertClass: "alert-danger"
+    };
+  }
+  if (/ODAS-Proxy-Fehler/i.test(msg) || /kein content-String/i.test(msg)) {
+    return {
+      kind: "PROXY_HTTP",
+      titel: msg,
+      hinweis: "Prüfen Sie proxyAktiv und Erreichbarkeit im ODAS-Live-System (lokal 404 ist normal).",
+      detail: msg,
+      alertClass: "alert-danger"
+    };
+  }
+  if (/Direkter Datenabruf fehlgeschlagen/i.test(msg) || /Failed to fetch/i.test(msg)) {
+    const corsHint = /Failed to fetch/i.test(msg) ? " – vermutlich CORS blockiert → im ODAS-Live proxyAktiv=ja." : "";
+    return {
+      kind: "DIREKT_CORS_HTTP",
+      titel: msg,
+      hinweis: `Prüfen Sie URL und CORS der Quelle${corsHint}`,
+      detail: msg,
+      alertClass: "alert-danger"
+    };
+  }
+  if (/liefert kein JSON/i.test(msg) || /HTML-Seite|CSV-|leere Antwort|unlesbaren/i.test(msg)) {
+    return {
+      kind: "PAYLOAD_TYP",
+      titel: msg,
+      hinweis: "Tragen Sie den passenden Endpunkt ein – nicht die Datensatzseite (/dataset/…) – Hilfe-Tooltip beachten.",
+      detail: msg,
+      alertClass: "alert-danger"
+    };
+  }
+  if (/CKAN.*Fehler|success:false/i.test(msg)) {
+    return {
+      kind: "CKAN_API",
+      titel: msg,
+      hinweis: "Prüfen Sie Daten-ID / Datensatz-ID (existiert die Tabelle/Datei noch auf dem Portal?).",
+      detail: msg,
+      alertClass: "alert-danger"
+    };
+  }
+  if (/404|Nicht gefunden/i.test(msg)) {
+    return {
+      kind: "HTTP_404",
+      titel: msg,
+      hinweis: "Ressource/Datensatz auf dem Portal nicht gefunden (404).",
+      detail: msg,
+      alertClass: "alert-danger"
+    };
+  }
+  return {
+    kind: "UNBEKANNT",
+    titel: msg || "Unbekannter Fehler beim Laden.",
+    hinweis: "Prüfen Sie Konfiguration und Erreichbarkeit der Quelle.",
+    detail: msg,
+    alertClass: "alert-danger"
+  };
+}
+
+function renderOdasFehler(container, error, kontext = {}) {
+  if (!container) return;
+  const typWarn = validateUrlTypErwartung(kontext.url, kontext.erwarteterTyp);
+  if (typWarn && !/Typ passt nicht/i.test(String(error && error.message))) {
+    error = new Error(typWarn);
+  }
+  const info = classifyOdasFehler(error, kontext);
+  const url = String(kontext.url || "");
+  const urlZeile = url ? `<p class="mb-1 small text-muted">Konfigurierte URL: <code>${escapeHtml(url.length > 80 ? url.slice(0, 80) + "…" : url)}</code></p>` : "";
+  const titel = kontext.leer ? "Keine Datensätze gefunden." : info.titel;
+  const alertClass = kontext.leer ? "alert-info" : info.alertClass;
+  container.innerHTML = `<div class="alert ${alertClass}" role="alert"><strong>${escapeHtml(titel)}</strong><p class="mb-1">${escapeHtml(info.hinweis)}</p>${urlZeile}<details class="small"><summary>Details</summary><code>${escapeHtml(info.detail || String(error))}</code></details></div>`;
+}
+
+function isLeerErgebnis(json) {
+  if (!json) return true;
+  if (Array.isArray(json) && json.length === 0) return true;
+  if (Array.isArray(json.records) && json.records.length === 0) return true;
+  if (Array.isArray(json.results) && json.results.length === 0) return true;
+  if (json.result && Array.isArray(json.result.records) && json.result.records.length === 0) return true;
+  return false;
+}
+
 
 /**
  * Erstellt Marker und Listeneinträge für POIs und fügt sie dem Cluster und der Liste hinzu.
