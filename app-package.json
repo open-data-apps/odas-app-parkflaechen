@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "parkflaechen",
   "name": "Parkflächen",
-  "app-version": "1.30.0",
+  "app-version": "1.30.1",
   "app-package-version": "2",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
@@ -311,8 +311,8 @@
   "daten": {
     "beschreibung": "Die Parkflächen-App verarbeitet konfigurierbare Open-Data-Ressourcen aus dem Open Data Portal (z.B. JSON- oder CSV-Endpunkte).",
     "schema": "assets/schema.json",
-    "beispiel": "",
-    "beispiel-url": ""
+    "beispiel": "CKAN-package_show-Antwort mit result.resources[] (CSV-Dateien je Stadt) zur Ressourcenauswahl (JSON); Parkplatzdaten stammen aus der gewählten CSV.",
+    "beispiel-url": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=parkflachen"
   },
   "branding-css": ""
 }

@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.30.1 - 2026-09-07
+- **FIX:** Frictionless-Härtung: `daten.beispiel`/`beispiel-url` befüllt (Schema beschreibt belegt die normalisierten Parkplatzdaten der gewählten CSV). package_show-Default bleibt (4B-Ausnahme: Ressourcenauswahl nicht tabellarisch validierbar, Rot-Beleg im REPORT).
+
 ## 1.30.0 - 2026-08-25
 - **CHG:** Datensatz-Link in der Beschreibung nutzt den neuen Shortcode `{{{appinstanz.urlDaten}}}` und zeigt damit auf den tatsächlich gebuchten Datensatz statt auf eine feste Beispiel-URL.
 
