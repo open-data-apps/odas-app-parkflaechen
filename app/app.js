@@ -347,15 +347,6 @@ function renderOdasFehler(container, error, kontext = {}) {
   container.innerHTML = `<div class="alert ${alertClass}" role="alert"><strong>${escapeHtml(titel)}</strong><p class="mb-1">${escapeHtml(info.hinweis)}</p>${urlZeile}<details class="small"><summary>Details</summary><code>${escapeHtml(info.detail || String(error))}</code></details></div>`;
 }
 
-function isLeerErgebnis(json) {
-  if (!json) return true;
-  if (Array.isArray(json) && json.length === 0) return true;
-  if (Array.isArray(json.records) && json.records.length === 0) return true;
-  if (Array.isArray(json.results) && json.results.length === 0) return true;
-  if (json.result && Array.isArray(json.result.records) && json.result.records.length === 0) return true;
-  return false;
-}
-
 
 /**
  * Erstellt Marker und Listeneinträge für POIs und fügt sie dem Cluster und der Liste hinzu.
@@ -404,7 +395,9 @@ function renderPOIsOnMapAndSidebar(poiGroups, targetClusterGroup, poiList) {
  */
 async function fetchResourceRecords(resourceId) {
   const datastoreApiUrl = new URL(getOdasApiUrl(configData, "parkflaechen")).origin + "/api/3/action/datastore_search";
-  const query = `?resource_id=${resourceId}`;
+  // PF-L1: Ressourcen-ID kodieren — ein Sonderzeichen im Wert wuerde sonst die
+  // Query-Zeichenkette zerlegen.
+  const query = `?resource_id=${encodeURIComponent(resourceId)}`;
   // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
   const data = await fetchOdasJson(datastoreApiUrl + query, configData);
 
@@ -583,7 +576,7 @@ function setupEventListeners() {
 
 async function getAllResourceNamesAndIdsFromDataset(datasetId) {
   try {
-    const apiUrl = `${new URL(getOdasApiUrl(configData, "parkflaechen")).origin}/api/3/action/package_show?id=${datasetId}`;
+    const apiUrl = `${new URL(getOdasApiUrl(configData, "parkflaechen")).origin}/api/3/action/package_show?id=${encodeURIComponent(datasetId)}`;
     // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
     const data = await fetchOdasJson(apiUrl, configData);
 
@@ -615,4 +608,6 @@ async function getAllResourceNamesAndIdsFromDataset(datasetId) {
  *
  * @returns {string} - HTML mit script, link, etc. Tags
  */
-function addToHead() {}
+function addToHead() {
+  return ``;
+}

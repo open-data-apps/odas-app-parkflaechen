@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.30.3 - 2026-09-10
+- **FIX (PF-L1):** `resource_id` und `id` werden im Datastore- bzw. `package_show`-Aufruf jetzt URL-kodiert (`encodeURIComponent`). Ein Sonderzeichen im Wert hätte die Query-Zeichenkette zerlegt. Kein Verhaltensunterschied für normale CKAN-IDs.
+- **TECH (PF-L5):** ungenutzter Helfer `isLeerErgebnis` entfernt; `addToHead` gibt `""` statt `undefined` zurück.
+- **Unverändert (dokumentierte Legacy-Sonderarchitektur):** modulglobale Karten-Singletons (`map`, `markerClusterGroup`, `mapGeneration`), eigene `index.html`/Navigationsmuster mit Sidebar außerhalb `#main-content`, statische Bibliotheks-Tags, minimale Fehlerpfade (`check-fehler-render`: `val:2/rend:1`).
+
 ## 1.30.2 - 2026-09-10
 - **FIX:** `rel="noopener"` am Google-Maps-Link nachgetragen (H-2, Tabsicherheit-Härtung ohne Verhaltensänderung).
 
