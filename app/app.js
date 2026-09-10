@@ -375,7 +375,7 @@ function renderPOIsOnMapAndSidebar(poiGroups, targetClusterGroup, poiList) {
         ${escapeHtml(poi.description)}<br>
         <strong>Maximale Parkplätze: ${escapeHtml(poi.maxSpaces)}</strong><br>
         <strong>Freie Parkplätze: ${escapeHtml(freeSpaces)}</strong><br>
-        <a href="${escapeHtml(googleMapsUrl)}" target="_blank">In Google Maps ansehen</a>
+        <a href="${escapeHtml(googleMapsUrl)}" target="_blank" rel="noopener">In Google Maps ansehen</a>
       `;
 
       const marker = L.marker([poi.latitude, poi.longitude], {

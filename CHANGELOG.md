@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.30.2 - 2026-09-10
+- **FIX:** `rel="noopener"` am Google-Maps-Link nachgetragen (H-2, Tabsicherheit-Härtung ohne Verhaltensänderung).
+
 ## 1.30.1 - 2026-09-07
 - **FIX:** Frictionless-Härtung: `daten.beispiel`/`beispiel-url` befüllt (Schema beschreibt belegt die normalisierten Parkplatzdaten der gewählten CSV). package_show-Default bleibt (4B-Ausnahme: Ressourcenauswahl nicht tabellarisch validierbar, Rot-Beleg im REPORT).
 
