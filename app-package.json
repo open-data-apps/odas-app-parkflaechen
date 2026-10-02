@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "parkflaechen",
   "name": "Parkflächen",
-  "app-version": "1.30.3",
+  "app-version": "1.30.4",
   "app-package-version": "2",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
@@ -64,6 +64,7 @@
     "assets/Mobile_Screenshot_2.png"
   ],
   "api-version": "1",
+  "odas-services": ["proxy"],
   "instanz-config": {
     "seitentitel": {
       "label": "Seitentitel",
