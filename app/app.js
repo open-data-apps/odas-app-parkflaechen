@@ -514,7 +514,7 @@ async function updateMap(fitBounds = false, generation = mapGeneration) {
 
     if (ladeHinweise.length) {
       const hint = document.createElement("li");
-      hint.className = "list-group-item";
+      hint.className = "list-group-item pf-hinweis"; // von der Suche ausgenommen
       const alert = document.createElement("div");
       alert.className = "alert alert-warning mb-0";
       alert.setAttribute("role", "alert");
@@ -547,7 +547,7 @@ async function updateMap(fitBounds = false, generation = mapGeneration) {
     if (generation === mapGeneration) {
       const poiList = document.getElementById("poiList");
       if (poiList) {
-        poiList.innerHTML = `<li class="list-group-item"><div class="alert alert-danger mb-0" role="alert"><strong>Fehler beim Laden der Daten:</strong> ${escapeHtml(
+        poiList.innerHTML = `<li class="list-group-item pf-hinweis"><div class="alert alert-danger mb-0" role="alert"><strong>Fehler beim Laden der Daten:</strong> ${escapeHtml(
           error.message,
         )}</div></li>`;
       }
@@ -587,7 +587,8 @@ function setupEventListeners() {
   if (searchInput) {
     searchInput.onkeyup = function () {
       let filter = this.value.toLowerCase();
-      let items = document.querySelectorAll("#poiList .list-group-item");
+      // Hinweis- und Fehlerzeilen bleiben beim Suchen sichtbar.
+      let items = document.querySelectorAll("#poiList .list-group-item:not(.pf-hinweis)");
       items.forEach((item) => {
         let text = item.textContent.toLowerCase();
         item.style.display = text.includes(filter) ? "" : "none";

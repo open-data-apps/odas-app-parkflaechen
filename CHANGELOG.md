@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.30.7 - 2026-10-13
+- FIX: F-142 (Nachbesserung): Teilbestand- und Fehlerhinweis in der Seitenleiste bleiben beim Suchen sichtbar.
+
 ## 1.30.6 - 2026-10-08
 - FIX: F-140: Gleichnamige Standorte erhalten; Duplikate über quellgebundene ID oder Standortkombination erkennen, leere ID nicht als gemeinsame Identität behandeln.
 - FIX: F-141: Ausfälle einzelner Ressourcen als Teilbestand melden, Totalausfall als Fehler. Vorherige Kartenpunkte bleiben bei Totalausfall ausdrücklich nicht aktualisiert.
