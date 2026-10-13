@@ -255,7 +255,7 @@ function classifyOdasFehler(error, kontext = {}) {
     return {
       kind: "KEINE_QUELLE",
       titel: "Es ist keine Datenquelle konfiguriert.",
-      hinweis: `Prüfen Sie unter „URLs zu Datenressourcen → ${label}" ob eine gültige ${typLabel}-URL eingetragen ist (Hilfe-Tooltip beachten).`,
+      hinweis: `Prüfen Sie unter „URLs zu Datenressourcen → ${label}", ob eine gültige ${typLabel}-URL eingetragen ist (Hilfe-Tooltip beachten).`,
       detail: msg,
       alertClass: "alert-info"
     };
@@ -287,12 +287,22 @@ function classifyOdasFehler(error, kontext = {}) {
       alertClass: "alert-danger"
     };
   }
-  if (/Direkter Datenabruf fehlgeschlagen/i.test(msg) || /Failed to fetch/i.test(msg)) {
+  // Nur der Proxy-Helfer (Apps mit proxyAktiv) meldet "Direkter Datenabruf fehlgeschlagen".
+  if (/Direkter Datenabruf fehlgeschlagen/i.test(msg)) {
     const corsHint = /Failed to fetch/i.test(msg) ? " – vermutlich CORS blockiert → im ODAS-Live proxyAktiv=ja." : "";
     return {
       kind: "DIREKT_CORS_HTTP",
       titel: msg,
       hinweis: `Prüfen Sie URL und CORS der Quelle${corsHint}`,
+      detail: msg,
+      alertClass: "alert-danger"
+    };
+  }
+  if (/Failed to fetch/i.test(msg)) {
+    return {
+      kind: "NETZWERK",
+      titel: msg,
+      hinweis: "Die Quelle war nicht erreichbar. Prüfen Sie Internetverbindung und Erreichbarkeit der Quelle.",
       detail: msg,
       alertClass: "alert-danger"
     };
@@ -315,11 +325,11 @@ function classifyOdasFehler(error, kontext = {}) {
       alertClass: "alert-danger"
     };
   }
-  if (/404|Nicht gefunden/i.test(msg)) {
+  if (/\b404\b/.test(msg)) {
     return {
       kind: "HTTP_404",
       titel: msg,
-      hinweis: "Ressource/Datensatz auf dem Portal nicht gefunden (404).",
+      hinweis: "Die angefragte Adresse wurde nicht gefunden (404). Prüfen Sie, ob URL und Datensatz noch existieren. Lokal ohne ODAS gibt es weder Proxy noch Relay – Abrufe darüber enden dort mit 404.",
       detail: msg,
       alertClass: "alert-danger"
     };
