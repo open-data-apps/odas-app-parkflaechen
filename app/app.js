@@ -405,7 +405,13 @@ async function fetchResourceRecords(resourceId) {
     throw new Error("Ungültige Antwortstruktur");
   }
 
-  return data.result.records;
+  const records = data.result.records;
+  // F-142: Die CKAN-Gesamtmenge bleibt neben dem geladenen Fenster sichtbar.
+  if (Number(data.result.total) > records.length) {
+    records.ladeHinweis = "Teilbestand: " + records.length + " von " + data.result.total +
+      " Parkflächen geladen. Karte und freie Plätze beziehen sich nur auf dieses Datenfenster.";
+  }
+  return records;
 }
 
 async function updateMap(fitBounds = false, generation = mapGeneration) {
@@ -441,6 +447,8 @@ async function updateMap(fitBounds = false, generation = mapGeneration) {
 
     const poiNames = new Set();
     const poiGroups = {};
+    const ladeHinweise = [];
+    const ladeFehler = []; // F-141: Ressourcenfehler sind sichtbar, nicht nur Console-Warnungen.
 
     // Erstelle temporär ein neues Cluster, um Flackern zu minimieren
     const newClusterGroup = L.markerClusterGroup({
@@ -463,6 +471,7 @@ async function updateMap(fitBounds = false, generation = mapGeneration) {
         // Erneuter Check nach dem await: eine zwischenzeitlich gestartete neuere
         // Instanz gewinnt, diese Fortsetzung bricht ab (F-70).
         if (generation !== mapGeneration) return;
+        if (records.ladeHinweis) ladeHinweise.push(resourceName + ": " + records.ladeHinweis);
         if (records.length === 0) {
           console.warn(`Keine POIs gefunden für Ressource ID: ${resourceId}`);
           continue;
@@ -473,15 +482,27 @@ async function updateMap(fitBounds = false, generation = mapGeneration) {
         }
 
         records.forEach((poi) => {
-          if (poiNames.has(poi.name)) {
+          // F-140: Identität ist quellgebunden, niemals allein der Name.
+          const sourceId = [poi.id, poi._id].find(value => value != null && String(value).trim() !== "");
+          const identity = JSON.stringify([resourceId, sourceId != null ? String(sourceId) : [poi.name, poi.latitude, poi.longitude, poi.description || ""]]);
+          if (poiNames.has(identity)) {
             return;
           }
-          poiNames.add(poi.name);
+          poiNames.add(identity);
           poiGroups[resourceName].push(poi);
         });
       } catch (e) {
+        if (generation !== mapGeneration) return;
+        ladeFehler.push(resourceName + ": " + e.message);
         console.warn(`Fehler beim Laden der Ressource "${resourceName}" (${resourceId}):`, e);
       }
+    }
+    if (ladeFehler.length === resources.length) {
+      throw new Error("Alle Datenressourcen konnten nicht geladen werden. Vorhandene Kartenpunkte sind nicht aktualisiert. " + ladeFehler.join(" "));
+    }
+    if (ladeFehler.length) {
+      ladeHinweise.push("Teilbestand: " + ladeFehler.length + " von " + resources.length +
+        " Datenressourcen konnten nicht geladen werden. " + ladeFehler.join(" "));
     }
 
     // Render in Sidebar und auf die temporäre Cluster-Gruppe
@@ -490,6 +511,17 @@ async function updateMap(fitBounds = false, generation = mapGeneration) {
       newClusterGroup,
       document.getElementById("poiList")
     );
+
+    if (ladeHinweise.length) {
+      const hint = document.createElement("li");
+      hint.className = "list-group-item";
+      const alert = document.createElement("div");
+      alert.className = "alert alert-warning mb-0";
+      alert.setAttribute("role", "alert");
+      alert.textContent = ladeHinweise.join(" ");
+      hint.appendChild(alert);
+      document.getElementById("poiList").prepend(hint);
+    }
 
     // Entferne die alte Cluster-Gruppe falls vorhanden
     if (markerClusterGroup) {

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.30.6 - 2026-10-08
+- FIX: F-140: Gleichnamige Standorte erhalten; Duplikate über quellgebundene ID oder Standortkombination erkennen, leere ID nicht als gemeinsame Identität behandeln.
+- FIX: F-141: Ausfälle einzelner Ressourcen als Teilbestand melden, Totalausfall als Fehler. Vorherige Kartenpunkte bleiben bei Totalausfall ausdrücklich nicht aktualisiert.
+
+## 1.30.5 - 2026-10-08
+- FIX: F-142: Geladene CKAN-Datenfenster mit weniger Datensätzen als result.total in der Seitenleiste sichtbar als Teilbestand kennzeichnen.
+
 ## 1.30.4 - 2026-10-02
 - ENH: Verwendete ODAS-Dienste in `odas-services` deklariert.
 
