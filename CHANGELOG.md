@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.30.10 - 2026-10-15
+- FIX: Mobile Ansicht: Langer Portaltitel bricht nicht mehr in mehrere Zeilen um, sondern wird mit „…“ gekürzt; die Kopfzeile bleibt einzeilig, sodass das Suchfeld in der Seitenleiste nicht mehr verdeckt wird.
+
 ## 1.30.9 - 2026-10-15
 - DOCS: Neue Store-Screenshots: je drei Desktop- (1440 × 1000) und Mobile-Aufnahmen (390 × 844) der aktuellen App, aufgenommen auf der Dev-Instanz. Bisherige Bilder nach `docs/screenshots/archive/2026-10-13/` verschoben. Keine Änderung an App-Code oder Konfiguration.
 

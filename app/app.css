@@ -301,4 +301,17 @@ body {
   .list-group-item {
     font-size: 0.9rem;
   }
+  .navbar-brand {
+    flex-direction: row;
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+  }
+  #title-text {
+    margin-left: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
 }
