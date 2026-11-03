@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.30.11 - 2026-11-03
+- DOCS: MIT-Lizenz ergänzt: `LICENSE` liegt im Repository und im Lieferpaket (`make zip`), das README hat einen Abschnitt „Lizenz“. Keine Änderung an App-Code oder Konfiguration.
+
 ## 1.30.10 - 2026-10-15
 - FIX: Mobile Ansicht: Langer Portaltitel bricht nicht mehr in mehrere Zeilen um, sondern wird mit „…“ gekürzt; die Kopfzeile bleibt einzeilig, sodass das Suchfeld in der Seitenleiste nicht mehr verdeckt wird.
 
